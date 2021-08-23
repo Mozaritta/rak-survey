@@ -1,3 +1,18 @@
+/* @import url("https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"); */
+@import "bootstrap";
 body {
-    background-color: lightgray;
+  background-color: lightgray;
+}
+li {
+  margin: 10px;
+}
+ul {
+  display: flex;
+  justify-content: space-around;
+}
+.alert {
+  padding: 10px;
+  text-align: center;
+  margin: 0;
+  border-radius: 0;
 }
