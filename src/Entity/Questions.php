@@ -31,6 +31,12 @@ class Questions
      */
     private $valid;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="questions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +62,18 @@ class Questions
     public function setValid(bool $valid): self
     {
         $this->valid = $valid;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
