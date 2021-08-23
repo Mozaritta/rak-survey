@@ -1,20 +1,23 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% block title %}Hello QstController!{% endblock %}
+{% block title %}Rak Survey!{% endblock %}
 
 {% block body %}
-<style>
+<style> 
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello ! ✅</h1>    
 
-    This friendly message is coming from:
+    Can you please answer this Survey:
     <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Users/Emil/GitHub/Symfony/rak-survey/src/Controller/QstController.php'|file_link(0) }}">src/Controller/QstController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Users/Emil/GitHub/Symfony/rak-survey/templates/qst/index.html.twig'|file_link(0) }}">templates/qst/index.html.twig</a></code></li>
+    {% for qst in qsts %}
+        {% if qst.valid %}
+            <li>{{ qst.description }}</li>
+        {% endif %}
+    {% endfor %}
     </ul>
 </div>
 {% endblock %}
