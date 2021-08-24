@@ -1,7 +1,22 @@
 /* @import url("https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"); */
 @import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
 .grid-container {
+  padding-top: 50px;
   margin: 0 auto;
   height: 97vh;
   display: flex;
@@ -26,9 +41,6 @@
 
 .main-content_large {
   width: 100%;
-}
-body {
-  background-color: #fde2e5;
 }
 .sidebar_small {
   width: 0%;
