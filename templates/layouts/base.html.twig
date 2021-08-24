@@ -15,9 +15,14 @@
         {% endblock %}
     </head>
     <body>
+    
     	{{include('layouts/partials/_navbar.html.twig')}}
-        <div class="page-content p-5" id="content">
-        {% block body %}{% endblock %}
+    <div class="grid-container">
+    	{{include('layouts/partials/_nav.html.twig')}}
+        
+        <div class="main-content">
+            {% block body %}{% endblock %}
         </div>
+    </div>
     </body>
 </html>

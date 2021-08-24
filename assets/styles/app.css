@@ -1,62 +1,63 @@
 /* @import url("https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"); */
 @import "bootstrap";
-body {
-  background-color: lightgray;
-}
-li {
-  margin: 10px;
-}
-ul {
+
+.grid-container {
+  margin: 0 auto;
+  height: 97vh;
   display: flex;
-  justify-content: space-around;
-}
-.alert {
-  padding: 10px;
-  text-align: center;
-  margin: 0;
-  border-radius: 0;
-}
-.vertical-nav {
-  min-width: 17rem;
-  width: 17rem;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s;
+  transition: 1s ease;
 }
 
-.page-content {
-  width: calc(100% - 17rem);
-  margin-left: 17rem;
-  transition: all 0.4s;
+.sidebar {
+  width: 20%;
+  height: 100%;
+  background-color: rgb(34, 3, 189);
+  transition: 1s ease;
+  position: relative;
 }
 
-/* for toggle behavior */
-
-#sidebar.active {
-  margin-left: -17rem;
-}
-
-#content.active {
+.main-content {
   width: 100%;
-  margin: 0;
+  height: 100%;
+  background: #599fd9;
+  transition: 1s ease;
 }
 
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -17rem;
-  }
-  #sidebar.active {
-    margin-left: 0;
-  }
-  #content {
-    width: 100%;
-    margin: 0;
-  }
-  #content.active {
-    margin-left: 17rem;
-    width: calc(100% - 17rem);
-  }
+.main-content_large {
+  width: 100%;
+}
+
+.sidebar_small {
+  width: 0%;
+}
+
+button {
+  position: absolute;
+  height: 40px;
+  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
+  left: 70%;
+  top: 1rem;
+  transform: translateX(10%);
+  cursor: pointer;
+}
+
+body {
+  background: #599fd9;
+  background: -webkit-linear-gradient(to right, #599fd9, #c2e59c);
+  background: linear-gradient(to right, #599fd9, #c2e59c);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.separator {
+  margin: 3rem 0;
+  border-bottom: 1px dashed #fff;
+}
+
+.text-uppercase {
+  letter-spacing: 0.1em;
+}
+
+.text-gray {
+  color: #aaa;
 }

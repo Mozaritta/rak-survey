@@ -1,0 +1,47 @@
+{# <div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+</div>
+
+<div id="main">
+        <button class="navbar-toggler bg-dark navbar-dark" onclick="openNav(2)"  type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"  aria-label="Toggle navigation" id="sidebarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+  <h2>Collapsed Sidebar</h2>
+  <p>Click on the hamburger menu/bar icon to open the sidebar, and push this content to the right.</p>
+</div>
+
+<script>
+    $a = 2;
+function openNav($a) {
+    if($a == 2){
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+}
+console.log($a);
+$a = $a +1;
+function closeNav($a) {
+    if($a == 3){
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+}
+</script> #}
+
+  <div class="sidebar">
+    <button class="navbar-toggler bg-light navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"  aria-label="Toggle navigation" id="sidebarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+<script>
+const sidebar = document.querySelector('.sidebar');
+const mainContent = document.querySelector('.main-content');
+document.querySelector('#sidebarCollapse').onclick = function () {
+  sidebar.classList.toggle('sidebar_small');
+  mainContent.classList.toggle('main-content_large')
+}
+</script>   
