@@ -72,7 +72,7 @@ class QstController extends AbstractController
     /**
      * @Route("delete{id<[0-9]+>}", name="delete_qst")
      */
-    public function delete(Request $request, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    public function delete(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
     {
         $qst = $qstRepository->findOneBy(['id' => $id]);
         $em->remove($qst);

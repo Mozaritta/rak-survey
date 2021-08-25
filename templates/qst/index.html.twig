@@ -16,11 +16,14 @@
     {% for qst in qsts %}
         {% if qst.valid %}
             <div style="display:flex;font-weight:bold; font-size:20px">
-            <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}.</li>
+            <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}</li>
         </div>
         <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a type="button" class="btn btn-primary" href="{{ path('app_home') }}">Add</a>
-                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">To new survey</a></li>
+                    <li><a class="dropdown-item" href="#">To existing survey</a></li>
+                </ul>                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
             </div>
         <ul>
