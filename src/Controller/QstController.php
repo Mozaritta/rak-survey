@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Questions;
+use App\Entity\Survey;
 use App\Form\QuestionsType;
+use App\Form\SurveyType;
 use App\Repository\QuestionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,9 +26,9 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("/valid", name="valid_qst")
+     * @Route("/valid", name="valid_qst", methods="GET")
      */
-    public function FunctionName(QuestionsRepository $qstRepository): Response
+    public function valid(QuestionsRepository $qstRepository): Response
     {
         $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
         return $this->render('qst/valid.html.twig', compact('qsts'));
@@ -96,11 +98,34 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="add_form")
+     * @Route("/create", name="add_form", methods="GET|POST")
      */
-    public function createSurvey(): Response
+    public function createSurvey(Request $request, EntityManagerInterface $em): Response
     {
-        return $this->render('$0.html.twig', []);
+        $survey = new Survey;
+        $form = $this->createForm(SurveyType::class, $survey);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($survey);
+            $em->flush();
+            $this->addFlash(
+                'primary',
+                'Form created successfully'
+            );
+            return $this->redirectToRoute('app_home');
+        }
+        return $this->render('survey/create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/survey", name="show_form")
+     */
+    public function FunctionName(): Response
+    {
+        return $this->render('survey/show.html.twig', []);
     }
 
     /**
