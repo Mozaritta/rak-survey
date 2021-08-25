@@ -24,6 +24,15 @@ class QstController extends AbstractController
     }
 
     /**
+     * @Route("/valid", name="valid_qst")
+     */
+    public function FunctionName(QuestionsRepository $qstRepository): Response
+    {
+        $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('qst/valid.html.twig', compact('qsts'));
+    }
+
+    /**
      * @Route("/add", name="add_qst", methods="GET|POST")
      */
     public function addQst(Request $request, EntityManagerInterface $em): Response
@@ -86,6 +95,13 @@ class QstController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
+    /**
+     * @Route("/create", name="add_form")
+     */
+    public function createSurvey(): Response
+    {
+        return $this->render('$0.html.twig', []);
+    }
 
     /**
      * @Route("/check", name="app_check")

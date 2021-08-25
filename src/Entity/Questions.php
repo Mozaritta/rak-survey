@@ -39,6 +39,11 @@ class Questions
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Survey::class, inversedBy="question")
+     */
+    private $survey;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +81,18 @@ class Questions
     public function setType(?Type $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSurvey(): ?Survey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(?Survey $survey): self
+    {
+        $this->survey = $survey;
 
         return $this;
     }
