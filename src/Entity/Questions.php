@@ -7,6 +7,7 @@ use App\Entity\Traits\Timestamp;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass=QuestionsRepository::class)
  * @ORM\HasLifecycleCallbacks
@@ -23,6 +24,8 @@ class Questions
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Description cannot be blank")
+     * @Assert\Length(min=10)
      */
     private $description;
 

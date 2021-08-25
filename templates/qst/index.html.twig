@@ -19,7 +19,9 @@
             <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}.</li>
         </div>
         <ul>
-            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small></li></ul>
+            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small>
+            <li style="list-style: none;"><small> Subbmitted : {{qst.createdAt|date}}</small></li>
+            </li></ul>
         {% endif %}
     {% endfor %}
     </ul>
