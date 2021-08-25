@@ -11,11 +11,15 @@
 <div class="example-wrapper">
     <h1>Hello ! ✅</h1>    
 
-    Can you please answer this Survey:
+    This is the list of valid questions
     <ul>
     {% for qst in qsts %}
         {% if qst.valid %}
-            <li>{{ qst.description }}</li>
+            <div style="display:flex;font-weight:bold; font-size:20px">
+            <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}.</li>
+        </div>
+        <ul>
+            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small></li></ul>
         {% endif %}
     {% endfor %}
     </ul>

@@ -45,4 +45,14 @@ class QstController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+
+    /**
+     * @Route("/check", name="app_check")
+     */
+    public function check(QuestionsRepository $qstRepository): Response
+    {
+        $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('qst/check.html.twig', compact('qsts'));
+    }
 }

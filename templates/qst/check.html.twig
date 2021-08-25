@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Check Questions!{% endblock %}
+
+{% block body %}
+<style> 
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello ! ✅</h1>    
+
+    This is the list oh the unchecked questions:
+    <ul>
+    {% for qst in qsts %}
+        {% if qst.valid %}
+            {# <h1> no questions to validate ^O^</h1> #}
+
+        {% else %}
+        <div style="display:flex;font-weight:bold; font-size:20px">
+            <i class="bi bi-patch-question"></i>
+            <small> &nbsp</small>
+            <li style="list-style: none;">{{ qst.description }}</li>
+        </div>
+        <ul>
+            <li style="list-style: none;">
+            <small> Type : {{qst.type.name}}</small>
+            </li>
+        </ul>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
