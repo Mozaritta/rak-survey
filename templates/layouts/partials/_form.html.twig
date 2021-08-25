@@ -1,0 +1,7 @@
+ {% form_theme form 'bootstrap_5_layout.html.twig' %}
+ {{form_start(form)}}
+    {{ form_widget(form)}}
+    <div class="text-center">
+    <input class="btn btn-primary btn-block w-64" type="submit" value=" {{submitBtn|default('Update')}} " formnovalidate >
+    </div>
+{{form_end(form)}}
