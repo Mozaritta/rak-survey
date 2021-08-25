@@ -15,8 +15,6 @@ class QuestionsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // $typeRepository = new TypeRepository;
-        // $type = $typeRepository->findBy([]);
         $builder
             ->add('description', TextType::class, ['required' => true])
             ->add('valid', CheckboxType::class, ['value' => false, 'disabled' => true]) // disabled fot the client but should be enabled for admins

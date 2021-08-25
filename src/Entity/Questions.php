@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\QuestionsRepository;
 use App\Entity\Traits\Timestamp;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,7 +49,7 @@ class Questions
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

@@ -46,6 +46,46 @@ class QstController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/qstup/{id<[0-9]+>}", name="update_qst")
+     */
+    public function updateQst(Request $request, int $id, QuestionsRepository $qstRepository, EntityManagerInterface $em): Response
+    {
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(QuestionsType::class, $qst);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'Question updated successfully'
+            );
+            return $this->redirectToRoute('app_home');
+        }
+        return $this->render('qst/edit.html.twig', [
+            'qst' => $qst,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("delete{id<[0-9]+>}", name="delete_qst")
+     */
+    public function delete(Request $request, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    {
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $em->remove($qst);
+        $em->flush();
+        $message = 'Question deleted successfully';
+        $this->addFlash(
+            'danger',
+            $message
+        );
+        // }
+        return $this->redirectToRoute('app_home');
+    }
+
 
     /**
      * @Route("/check", name="app_check")
