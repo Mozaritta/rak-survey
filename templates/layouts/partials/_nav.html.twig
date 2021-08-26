@@ -2,8 +2,8 @@
     <button id="button" class="navbar-toggler bg-light navbar-light" onclick="change(); hide(); toogle();" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"  aria-label="Toggle navigation" id="sidebarCollapse">
         <i class="bi bi-chevron-left"></i>
     </button>
-        <div class="col-auto col-md-3 col-xl-12 px-sm-4 px-0 bg-dark">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <div class="col-auto col-md-3 col-xl-12 px-sm-4 px-0 pt-4 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white" style="height:93.2vh" >
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
@@ -21,7 +21,10 @@
                                 <a href="{{ path('add_form') }}" class="nav-link px-0"><i class="fs-8 bi-file-earmark-plus"></i><span class="span" class="d-none d-sm-inline">New</span> </a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"><i class="fs-8 bi-eye"></i><span class="span" class="d-none d-sm-inline">Show</span> </a>
+                                <a href="#" class="nav-link px-0"><i class="fs-8 bi-pencil-square"></i><span class="span" class="d-none d-sm-inline">Edit</span> </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('show_form') }}" class="nav-link px-0"><i class="fs-8 bi-eye"></i><span class="span" class="d-none d-sm-inline">Show</span> </a>
                             </li>
                         </ul>
                     </li>
@@ -80,7 +83,7 @@
                     </li>
                 </ul>
                 <hr>
-                <div class="dropdown pb-4">
+                <div class="dropdown pb-4" >
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
                         <span class="d-none d-sm-inline mx-1">loser</span>

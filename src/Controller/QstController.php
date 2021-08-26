@@ -7,6 +7,7 @@ use App\Entity\Survey;
 use App\Form\QuestionsType;
 use App\Form\SurveyType;
 use App\Repository\QuestionsRepository;
+use App\Repository\SurveyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +84,7 @@ class QstController extends AbstractController
     /**
      * @Route("delete{id<[0-9]+>}", name="delete_qst")
      */
-    public function delete(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    public function deleteQst(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
     {
         $qst = $qstRepository->findOneBy(['id' => $id]);
         $em->remove($qst);
@@ -123,9 +124,10 @@ class QstController extends AbstractController
     /**
      * @Route("/survey", name="show_form")
      */
-    public function FunctionName(): Response
+    public function showSurvey(SurveyRepository $srvRepository): Response
     {
-        return $this->render('survey/show.html.twig', []);
+        $srv = $srvRepository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('survey/show.html.twig', compact('srv'));
     }
 
     /**

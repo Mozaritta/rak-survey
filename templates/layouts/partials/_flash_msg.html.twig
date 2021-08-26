@@ -1,5 +1,16 @@
 {% for type, messages in app.flashes%}
     {% for message in messages %}
-        <div role="alert" class="alert alert-{{type}}">{{message}}</div>
+    {% if type is same as 'success' %}
+        <div role="alert" class="alert alert-{{type}} text-center" style="background-color:green;color:white">{{message}}!</div>
+    {% elseif type is same as 'danger' %}
+        <div role="alert" class="alert alert-{{type}} text-center" style="background-color:red;color:white">{{message}}!</div>
+    {% elseif type is same as 'warning' %}
+        <div role="alert" class="alert alert-{{type}} text-center" style="background-color:yellow;color:white">{{message}}!</div>
+    {% elseif type is same as 'primary' %}
+        <div role="alert" class="alert alert-{{type}} text-center" style="background-color:blue;color:white">{{message}}</div>
+
+    {% endif %}
+
+
     {% endfor %}
 {% endfor %}
