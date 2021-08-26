@@ -25,6 +25,7 @@ class QstController extends AbstractController
         $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
         return $this->render('qst/index.html.twig', compact('qsts'));
     }
+    ////// START QST CRUD /////////////////////////
 
     /**
      * @Route("/valid", name="valid_qst", methods="GET")
@@ -59,7 +60,7 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("/qstup/{id<[0-9]+>}", name="update_qst")
+     * @Route("/updateQst/{id<[0-9]+>}", name="update_qst")
      */
     public function updateQst(Request $request, int $id, QuestionsRepository $qstRepository, EntityManagerInterface $em): Response
     {
@@ -82,7 +83,7 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("delete{id<[0-9]+>}", name="delete_qst")
+     * @Route("/deleteQst/{id<[0-9]+>}", name="delete_qst")
      */
     public function deleteQst(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
     {
@@ -99,6 +100,17 @@ class QstController extends AbstractController
     }
 
     /**
+     * @Route("/check", name="app_check")
+     */
+    public function check(QuestionsRepository $qstRepository): Response
+    {
+        $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('qst/check.html.twig', compact('qsts'));
+    }
+
+    ////// END QST CRUD /////////////////////////
+    ////// SURVEY CRUD /////////////////////////
+    /**
      * @Route("/create", name="add_form", methods="GET|POST")
      */
     public function createSurvey(Request $request, EntityManagerInterface $em): Response
@@ -114,7 +126,7 @@ class QstController extends AbstractController
                 'primary',
                 'Form created successfully'
             );
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('show_form');
         }
         return $this->render('survey/create.html.twig', [
             'form' => $form->createView()
@@ -131,11 +143,43 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("/check", name="app_check")
+     * @Route("/update/{id<[0-9]+>}", name="update_form"))
      */
-    public function check(QuestionsRepository $qstRepository): Response
+    public function updateSurvey(Request $request, int $id, SurveyRepository $srvRepository, EntityManagerInterface $em): Response
     {
-        $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-        return $this->render('qst/check.html.twig', compact('qsts'));
+        $srv = $srvRepository->findOneBy(['id' => $id]);
+
+        $form = $this->createForm(SurveyType::class, $srv);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'Survey updated successfully'
+            );
+            return $this->redirectToRoute('show_form');
+        }
+        return $this->render('survey/update.html.twig', [
+            'srv' => $srv,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id<[0-9]+>}", name="delete_form")
+     */
+    public function deleteSurvey(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    {
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $em->remove($qst);
+        $em->flush();
+        $message = 'Survey deleted successfully';
+        $this->addFlash(
+            'danger',
+            $message
+        );
+        // }
+        return $this->redirectToRoute('app_home');
     }
 }

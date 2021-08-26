@@ -23,7 +23,8 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">To new survey</a></li>
                     <li><a class="dropdown-item" href="#">To existing survey</a></li>
-                </ul>                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                </ul>
+                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
             </div>
         <ul>

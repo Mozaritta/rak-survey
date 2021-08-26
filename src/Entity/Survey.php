@@ -26,6 +26,7 @@ class Survey
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message = "Description cannot be blank")
+     * @Assert\Length(min=10)
      */
     private $name;
 
@@ -33,6 +34,11 @@ class Survey
      * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="survey")
      */
     private $question;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
 
     public function __construct()
     {
@@ -82,6 +88,18 @@ class Survey
                 $question->setSurvey(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
