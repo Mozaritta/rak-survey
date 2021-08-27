@@ -74,7 +74,11 @@ class QstController extends AbstractController
                 'success',
                 'Question updated successfully'
             );
-            return $this->redirectToRoute('app_home');
+            if ($qst->getValid() == false) {
+                return $this->redirectToRoute('app_check');
+            } else {
+                return $this->redirectToRoute('app_home');
+            }
         }
         return $this->render('qst/edit.html.twig', [
             'qst' => $qst,
@@ -97,6 +101,23 @@ class QstController extends AbstractController
         );
         // }
         return $this->redirectToRoute('app_home');
+    }
+
+    /**
+     * @Route("/validateQst/{id<[0-9]+>}", name="validate_qst")
+     */
+    public function validateQst(QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    {
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $qst->setValid(true);
+        $em->flush();
+        $message = 'Question validated successfully';
+        $this->addFlash(
+            'primary',
+            $message
+        );
+        // }
+        return $this->redirectToRoute('app_check');
     }
 
     /**
@@ -190,5 +211,23 @@ class QstController extends AbstractController
         );
         // }
         return $this->redirectToRoute('app_home');
+    }
+
+    /**
+     * @Route("/delete/from/{id<[0-9]+>}", name="delete_from_form")
+     */
+    public function deleteFromSurvey(SurveyRepository $surveyRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    {
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $srv = $surveyRepository->findOneBy(['id' => $qst->getSurvey()]);
+        $srv->removeQuestion($qst);
+        $em->flush();
+        $message = 'Question deleted from survey successfully';
+        $this->addFlash(
+            'success',
+            $message
+        );
+        // }
+        return $this->redirectToRoute('show_form');
     }
 }

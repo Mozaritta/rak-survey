@@ -14,9 +14,6 @@
     This is the list of valid questions
     <ul>
     {% for qst in qsts %}
-    {% if qst.count ==  %}
-        
-    {% endif %}
         {% if qst.valid %}
             <div style="font-weight:bold; font-size:20px">
             <li style="list-style: none;width:400px"><input class="form-control bg-white my-2" value="{{ qst.description }}" disabled/></li>

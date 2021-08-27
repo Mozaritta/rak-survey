@@ -25,7 +25,8 @@ class QuestionsType extends AbstractType
             ])
             ->add('survey', EntityType::class, [
                 'class' => Survey::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'expanded' => 'true'
             ]);
     }
 

@@ -9,26 +9,19 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello ! ✅</h1>    
-
+    <h1>Hello ! ✅</h1>
     This is the list oh the unchecked questions:
-    <ul>
-    {% for qst in qsts %}
-        {% if qst.valid %}
-            {# <h1> no questions to validate ^O^</h1> #}
 
-        {% else %}
-        <div style="display:flex;font-weight:bold; font-size:20px">
-            <i class="bi bi-patch-question"></i>
-            <small> &nbsp</small>
-            <li style="list-style: none;">{{ qst.description }}</li>
+    <ul>
+    {% set a = 0%}
+    {% for qst in qsts %}
+        {% if not qst.valid %}
+        {% set a = a +1 %}
+         <div style="font-weight:bold; font-size:20px">
+            <li style="list-style: none;width:400px"><input class="form-control bg-white my-2" value="{{ qst.description }}" disabled/></li>
         </div>
         <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Add to new survey</a></li>
-                    <li><a class="dropdown-item" href="#">Add to existing survey</a></li>
-                </ul>
+                <a type="button" class="btn btn-primary"  href="{{ path('validate_qst', {id: qst.id}) }}">Validate</a>
                 <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
             </div>
@@ -37,9 +30,13 @@
             <small> Type : {{qst.type.name}}</small>
             </li>
             <li style="list-style: none;"><small> Subbmitted : {{qst.createdAt|date}}</small></li>
-        </ul>
+        </ul>        
         {% endif %}
     {% endfor %}
+    
+        {% if a == 0 %}
+                <h1> No questions to validate ^O^</h1>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
