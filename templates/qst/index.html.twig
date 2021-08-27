@@ -9,29 +9,45 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello ! ✅</h1>    
-
+    <h1>Hello ! ✅</h1>
     This is the list of valid questions
     <ul>
     {% for qst in qsts %}
         {% if qst.valid %}
-            <div style="font-weight:bold; font-size:20px">
-            <li style="list-style: none;width:400px"><input class="form-control bg-white my-2" value="{{ qst.description }}" disabled/></li>
+            <div style="display:flex; flex-wrap:wrap;font-weight:bold; font-size:20px">
+            <li style="list-style: none;width:400px"><input class="form-control bg-white my-2"   value="{{ qst.description }}" disabled/>
+            </li>
         </div>
-        <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add</a>
+        {% if qst.survey is same as null %}
+            <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
+                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add To</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">To new survey</a></li>
-                    <li><a class="dropdown-item" href="#">To existing survey</a></li>
-                </ul>                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                
+                    {% for srv in srvs %}
+                        <li><a class="dropdown-item" href="{{ (path('insert_qst', {idd: srv.id, id:qst.id})) }}">{{srv.name}}</a></li>
+                    {% endfor %}
+                </ul>
+                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
+                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content="Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}} {% if qst.survey is not same as null %}
+            In survey: {{qst.survey.name}}
+            {% endif %}">Info</a>
             </div>
-        <ul>
-            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small>
-            <li style="list-style: none;"><small> Submitted : {{qst.createdAt|date}}</small></li>
-            </li></ul>
+        {% else %}
+            <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
+                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
+                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content=" {% if qst.survey is not same as null %}
+            In survey: {{qst.survey.name}}
+            {% endif %} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}} ">Info</a>
+            </div>
+        {% endif %}
         {% endif %}
     {% endfor %}
     </ul>
 </div>
+<script>var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})</script>
 {% endblock %}

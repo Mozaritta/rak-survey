@@ -1,6 +1,9 @@
 /* @import url("https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"); */
 @import "bootstrap";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+/* @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css");
+@import url("https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"); */
 
 .grid-container {
   padding-top: 50px;

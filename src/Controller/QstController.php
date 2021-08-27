@@ -20,10 +20,11 @@ class QstController extends AbstractController
      * @Route("/", name="app_home", methods="GET")
      * @Route("/qst/app_home")
      */
-    public function index(QuestionsRepository $qstRepository): Response
+    public function index(QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
     {
+        $srvs = $surveyRepository->findBy([], ['createdAt' => 'DESC']);
         $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-        return $this->render('qst/index.html.twig', compact('qsts'));
+        return $this->render('qst/index.html.twig', compact('qsts', 'srvs'));
     }
     ////// START QST CRUD /////////////////////////
 
@@ -157,10 +158,11 @@ class QstController extends AbstractController
     /**
      * @Route("/view/{id<[0-9]+>}", name="view_form")
      */
-    public function viewSurvey(Request $request, int $id, QuestionsRepository $qstRepository): Response
+    public function viewSurvey(Request $request, int $id, QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
     {
         $qsts = $qstRepository->findBy(['survey' => $id], ['createdAt' => 'DESC']);
-        return $this->render('survey/view.html.twig', compact('qsts'));
+        $srv = $surveyRepository->findOneBy(['id' => $id]);
+        return $this->render('survey/view.html.twig', compact('qsts', 'srv'));
     }
 
     /**
@@ -229,5 +231,23 @@ class QstController extends AbstractController
         );
         // }
         return $this->redirectToRoute('show_form');
+    }
+
+    /**
+     * @Route("/insert/{idd<[0-9]+>}/{id<[0-9]+>}", name="insert_qst")
+     */
+    public function insertIntoSurvey(int $idd, SurveyRepository $surveyRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    {
+        // dd($idd, $id);
+        $qst = $qstRepository->findOneBy(['id' => $id]);
+        $srv = $surveyRepository->findOneBy(['id' => $idd]);
+        $srv->addQuestion($qst);
+        $em->flush();
+        $message = 'Question added to survey successfully';
+        $this->addFlash(
+            'primary',
+            $message
+        );
+        return $this->redirectToRoute('app_home');
     }
 }

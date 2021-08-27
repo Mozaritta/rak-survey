@@ -14,13 +14,37 @@
     {% for qst in qsts %}
         <p class="card-text">{{qst.description}} <a href="{{ path('update_qst', {id:qst.id}) }}" class="link-success"> Update</a> <a href="{{ path('delete_from_form', {id:qst.id}) }}" class="link-danger">Delete</a></p>
     {% endfor %}
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <a href="{{ path('app_home') }}" class="btn btn-primary">Add questions</a>
   </div>
   <div class="card-footer text-muted">
-    {% for qst in qsts %}
-    Last updated : {{qst.survey.updatedAt|ago}}
-    {% endfor %}
+    Last updated : {{srv.updatedAt|ago}}
   </div>
 </div>
 </div>
+
+    {# <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+    <img height="200px" width="200px" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" class="rounded mr-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small class="text-muted">11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
+<script>
+var toastTrigger = document.getElementById('liveToastBtn')
+var toastLiveExample = document.getElementById('liveToast')
+if (toastTrigger) {
+  toastTrigger.addEventListener('click', function () {
+    var toast = new bootstrap.Toast(toastLiveExample)
+
+    toast.show()
+  })
+}
+</script> #}
 {% endblock %}  
