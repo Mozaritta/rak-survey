@@ -134,6 +134,15 @@ class QstController extends AbstractController
     }
 
     /**
+     * @Route("/view/{id<[0-9]+>}", name="view_form")
+     */
+    public function viewSurvey(Request $request, int $id, QuestionsRepository $qstRepository): Response
+    {
+        $qsts = $qstRepository->findBy(['survey' => $id], ['createdAt' => 'DESC']);
+        return $this->render('survey/view.html.twig', compact('qsts'));
+    }
+
+    /**
      * @Route("/survey", name="show_form")
      */
     public function showSurvey(SurveyRepository $srvRepository): Response

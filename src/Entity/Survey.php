@@ -25,7 +25,7 @@ class Survey
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message = "Description cannot be blank")
+     * @Assert\NotBlank(message = "Name cannot be blank")
      * @Assert\Length(min=10)
      */
     private $name;

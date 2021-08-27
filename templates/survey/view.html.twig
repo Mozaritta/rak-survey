@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title 'Show Survey'%}
+
+{% block body %}
+<div class="container mt-5">
+<div class="card text-center">
+  <div class="card-header">
+    Show survey
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Questions:</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    {% for qst in qsts %}
+        <p class="card-text">{{qst.description}} <a href="#" class="link-success"> Update</a> <a href="#" class="link-danger">Delete</a></p>
+    {% endfor %}
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+  <div class="card-footer text-muted">
+    {% for qst in qsts %}
+    Last updated : {{qst.survey.updatedAt|ago}}
+    {% endfor %}
+  </div>
+</div>
+</div>
+{% endblock %}  

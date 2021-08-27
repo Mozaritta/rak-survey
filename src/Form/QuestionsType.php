@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Questions;
+use App\Entity\Survey;
 use App\Entity\Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -17,9 +18,13 @@ class QuestionsType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, ['required' => true])
-            ->add('valid', CheckboxType::class, ['value' => false, 'disabled' => true]) // disabled fot the client but should be enabled for admins
+            ->add('valid', CheckboxType::class, ['value' => false]) //, 'disabled' => true]) // disabled fot the client but should be enabled for admins
             ->add('type', EntityType::class, [
                 'class' => Type::class,
+                'choice_label' => 'name'
+            ])
+            ->add('survey', EntityType::class, [
+                'class' => Survey::class,
                 'choice_label' => 'name'
             ]);
     }

@@ -19,18 +19,18 @@
             <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}</li>
         </div>
         <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add</a>
-                <ul class="dropdown-menu">
+                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuButton1" aria-expanded="true">Add</a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="#">To new survey</a></li>
                     <li><a class="dropdown-item" href="#">To existing survey</a></li>
                 </ul>
                 <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
-            </div>
+        </div>
         <ul>
-            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small>
+            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small></li>
             <li style="list-style: none;"><small> Subbmitted : {{qst.createdAt|date}}</small></li>
-            </li></ul>
+        </ul>
         {% endif %}
     {% endfor %}
     </ul>

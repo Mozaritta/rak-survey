@@ -14,9 +14,12 @@
     This is the list of valid questions
     <ul>
     {% for qst in qsts %}
+    {% if qst.count ==  %}
+        
+    {% endif %}
         {% if qst.valid %}
-            <div style="display:flex;font-weight:bold; font-size:20px">
-            <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}</li>
+            <div style="font-weight:bold; font-size:20px">
+            <li style="list-style: none;width:400px"><input class="form-control bg-white my-2" value="{{ qst.description }}" disabled/></li>
         </div>
         <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
                 <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add</a>
@@ -28,7 +31,7 @@
             </div>
         <ul>
             <li style="list-style: none;"><small> Type : {{qst.type.name}}</small>
-            <li style="list-style: none;"><small> Subbmitted : {{qst.createdAt|date}}</small></li>
+            <li style="list-style: none;"><small> Submitted : {{qst.createdAt|date}}</small></li>
             </li></ul>
         {% endif %}
     {% endfor %}
