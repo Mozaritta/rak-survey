@@ -9,6 +9,7 @@ use App\Form\SurveyType;
 use App\Repository\QuestionsRepository;
 use App\Repository\SurveyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+// use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +21,24 @@ class QstController extends AbstractController
      * @Route("/", name="app_home", methods="GET")
      * @Route("/qst/app_home")
      */
-    public function index(QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
-    {
+    public function index(
+        QuestionsRepository $qstRepository,
+        SurveyRepository $surveyRepository
+        // ,PaginatorInterface $paginator,
+        // Request $request
+    ): Response {
         $srvs = $surveyRepository->findBy([], ['createdAt' => 'DESC']);
         $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-        return $this->render('qst/index.html.twig', compact('qsts', 'srvs'));
+        // $data = $surveyRepository->findAll();
+        // $test = $paginator->paginate(
+        //     $data,
+        //     /**query Not result */
+        //     $request->query->getInt('page', 1),
+        //     /**page number */
+        //     2
+        //     /**limit per page */
+        // );
+        return $this->render('qst/index.html.twig', compact('qsts', 'srvs')); //, 'test'));
     }
     ////// START QST CRUD /////////////////////////
 

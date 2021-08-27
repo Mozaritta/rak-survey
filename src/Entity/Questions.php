@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Questions
 {
     use Timestamp;
+    public const NUM_ITEMS_PER_PAGE = 8;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
