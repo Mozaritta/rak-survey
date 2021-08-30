@@ -483,14 +483,16 @@ class QstController extends AbstractController
     /**
      * @Route("/answer", name="answer_form")
      */
-    public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, SurveyRepository $surveyRepository): Response
+    public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $frm = $formRepository->findOneBy(['id' => 1]);
             // dd($frm->getSurvey());
-            $srv = $surveyRepository->findBy(['form' => $frm]);
-            dd($srv);
-            return $this->render('client/form.html.twig', compact('frm'));
+            $srvs = $surveyRepository->findBy(['form' => !null]);
+            for ($i = 0; $i < 2; $i++) {
+                $qsts[$i] = $qstRepository->findBy(['survey' => $srvs[$i]->getId()]);
+            }
+            return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts'));
         } else {
             return $this->render('qst/valid.html.twig');
         }

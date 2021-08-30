@@ -4,14 +4,89 @@
 
 {% block body %}
 <style> 
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <h1>Answer Form {{frm.id}}</h1>
-    
-    
-    {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Submit'})}}
+    <h1 class="text-center">Answer Form {{frm.id}}</h1>
+</div>
+<div class="container" >
+        {# {% for srv in srvs %} #}
+            {# {{srv.name}}<br> #}
+    <div class="card mx-5">
+        <div class="card-body">
+            In this form you will go {{srvs|length}} surveys. Each with a specific content to reach the needs of our clients and to improve the performance of our website and our agency staff.
+        </div>
+    </div>
+                
+            
+    <div class="row row-cols-1 row-cols-md-1 g-4 mb-2 mt-1 mx-5 px-5">
+        {% for srv in srvs %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{srv.name}}</h5>
+                        {% if srv.description %}
+                            {# {{x.description}} #}
+                            <p class="card-text">{{srv.description}}</p>
+                        {% else %}
+                            <p class="card-text">No descriptin was set for this survey</p><br>
+                        {% endif %}
+                        {% for x in srv.question %}
+                            <br><p class="card-text">{{x.description}}</p>
+                            <div class="mx-2">
+                                {% if x.type.name is same as 'CheckBox' %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="check{{x.id}}" >
+                                        <label class="form-check-label" for="check{{x.id}}">
+                                        Very well
+                                        </label>
+                                    </div>
+                                {% elseif ((x.type.name) is same as 'RadioButton') %}
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault{{x.id}}" id="b1{{x.id}}" value="check{{x.id}}" checked>
+                                            <label class="form-check-label" for="b1{{x.id}}">
+                                            So Satisfying {{dump(x.id)}}
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault{{x.id}}" id="b2{{x.id}}" value="check{{x.id}}" >
+                                            <label class="form-check-label" for="b2{{x.id}}">
+                                                Satisfying
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault{{x.id}}" id="b3{{x.id}}" value="check{{x.id}}" >
+                                            <label class="form-check-label" for="b3{{x.id}}">
+                                                Neutral
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault{{x.id}}" id="b4{{x.id}}" value="check{{x.id}}" >
+                                            <label class="form-check-label" for="b4{{x.id}}">
+                                                Less Satisfying
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault{{x.id}}" id="b5{{x.id}}" value="check{{x.id}}">
+                                            <label class="form-check-label" for="b5{{x.id}}">
+                                                Insatisfying
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <input type="text" id="text{{x.id}}"/>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Submit'})}} #}
 </div>
 {% endblock %}
