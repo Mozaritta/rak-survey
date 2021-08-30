@@ -10,7 +10,7 @@
 
 <div class="example-wrapper">
     <h1 class="text-center">Show All Forms ✅</h1>
-<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 g-2">
 {% for survey in srv %}
     <div class="col">
         <div class="card h-100 border-primary mb-3">
@@ -27,9 +27,17 @@
             </div>
             <div class="card-footer text-center bg-white ">
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a href="{{ path('view_form', {id: survey.id}) }}" type="button" class="btn btn-primary ">View</a>
-                <a href="{{ path('update_form', {id: survey.id}) }}" type="button" class="btn btn-success ">Update</a>
-                <a href="{{ path('delete_form', {id: survey.id}) }}" onclick="return confirm('You sure you want to delete?')" type="button" class="btn btn-danger">Delete</a>
+            {% if survey.form is same as null %}
+            <a type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">+</a>
+                <ul class="dropdown-menu">                
+                    {% for form in frm %}
+                        <li><a class="dropdown-item" href="{{ (path('insert_srv', {idd: form.id, id:survey.id})) }}">{{form.name}}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <a href="{{ path('view_survey', {id: survey.id}) }}" type="button" class="btn btn-primary ">View</a>
+                <a href="{{ path('update_survey', {id: survey.id}) }}" type="button" class="btn btn-success ">Update</a>
+                <a href="{{ path('delete_survey', {id: survey.id}) }}" onclick="return confirm('You sure you want to delete?')" type="button" class="btn btn-danger">Delete</a>
             </div>            
             </div>
             <div class="card-footer">

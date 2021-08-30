@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title 'Show Form!' %}
+
+{% block body %}
+<style> 
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1 class="text-center">Show All Forms ✅</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+{% for form in frm %}
+    <div class="col">
+        <div class="card h-100 border-primary mb-3">
+            {# <img src="asset('/assets/images/images.png')" class="card-img-top" alt="..."> #}
+            <div class="card-body">
+            <h5 class="card-title text-primary text-center py-3 fs-2">{{form.name}}</h5>
+            {% if form.description %}
+                <p class="card-text pb-2">{{form.description}}.                
+            {% else %}
+                <p class="card-text pb-2 text-muted">No description addeed for this survey for the moment.                
+            {% endif %}
+                </p>
+                {# <figcaption class="blockquote-footer" style="position:absolute;bottom:90px;">Number of questions:{{form.question.count}}</figcaption> #}
+            </div>
+            <div class="card-footer text-center bg-white ">
+            <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
+                <a href="{{ path('view_form', {id: form.id}) }}" type="button" class="btn btn-primary ">View</a>
+                <a href="{{ path('update_form', {id: form.id}) }}" type="button" class="btn btn-success ">Update</a>
+                <a href="{{ path('delete_form', {id: form.id}) }}" onclick="return confirm('You sure you want to delete?')" type="button" class="btn btn-danger">Delete</a>
+            </div>            
+            </div>
+            <div class="card-footer">
+                <small class="text-muted border-primary">Last updated {{form.updatedAt|ago}}</small>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{# {{include('layouts/partials/_pagination.html.twig')}} #}
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title 'Create Survey!' %}
+{% block title 'Answer Form!' %}
 
 {% block body %}
 <style> 
@@ -9,7 +9,9 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Create new Survey ✅</h1>    
-    {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Create'})}}
+    <h1>Answer Form {{frm.id}}</h1>
+    
+    
+    {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Submit'})}}
 </div>
 {% endblock %}

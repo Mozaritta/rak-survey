@@ -15,13 +15,25 @@
                     </li>
                     <li>
                         <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-file-text"></i> <span class="span" class="ms-1 d-none d-sm-inline">Survey</span></a>
+                            <i class="fs-4 bi-pencil-square"></i> <span class="span" class="ms-1 d-none d-sm-inline">Survey</span></a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                            <li class="w-150">
+                                <a href="{{ path('add_survey') }}" class="nav-link px-0"><i class="fs-8 bi-file-earmark-plus"></i><span class="span" class="d-none d-sm-inline">New</span> </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('show_surveys') }}" class="nav-link px-0"><i class="fs-8 bi-eye"></i><span class="span" class="d-none d-sm-inline">Show</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-file-text"></i> <span class="span" class="ms-1 d-none d-sm-inline">Form</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                             <li class="w-150">
                                 <a href="{{ path('add_form') }}" class="nav-link px-0"><i class="fs-8 bi-file-earmark-plus"></i><span class="span" class="d-none d-sm-inline">New</span> </a>
                             </li>
                             <li>
-                                <a href="{{ path('show_form') }}" class="nav-link px-0"><i class="fs-8 bi-eye"></i><span class="span" class="d-none d-sm-inline">Show</span> </a>
+                                <a href="{{ path('show_forms') }}" class="nav-link px-0"><i class="fs-8 bi-eye"></i><span class="span" class="d-none d-sm-inline">Show</span> </a>
                             </li>
                         </ul>
                     </li>
@@ -80,21 +92,23 @@
                     </li>
                 </ul>
                 <hr>
+                {% if app.user %}
                 <div class="dropdown pb-4" >
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                        <img src="" width="30" height="30" class="rounded-circle">
                         <span class="d-none d-sm-inline mx-1">loser</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">View Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Agency's Policy</a></li>
+                        <li><a class="dropdown-item" href="#">Make a complaint</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Sign out</a></li>
                     </ul>
                 </div>
+                {% endif %}
             </div>
         </div>
 

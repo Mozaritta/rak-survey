@@ -9,30 +9,25 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello ! ✅</h1>    
+    <h1 class="text-center">Hello ! ✅</h1>    
 
-    This is the list of valid questions
-    <ul>
-    {% for qst in qsts %}
-        {% if qst.valid %}
-            <div style="display:flex;font-weight:bold; font-size:20px">
-            <i class="bi bi-question-octagon"></i><small> &nbsp</small><li style="list-style: none;">{{ qst.description }}</li>
-        </div>
-        <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-                <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuButton1" aria-expanded="true">Add</a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">To new survey</a></li>
-                    <li><a class="dropdown-item" href="#">To existing survey</a></li>
-                </ul>
-                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
-                <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
-        </div>
-        <ul>
-            <li style="list-style: none;"><small> Type : {{qst.type.name}}</small></li>
-            <li style="list-style: none;"><small> Subbmitted : {{qst.createdAt|date}}</small></li>
-        </ul>
-        {% endif %}
-    {% endfor %}
-    </ul>
+    
+    <div class="card shadow">
+  <div class="card-header fw-bold text-center">
+    Welcome to Rak Survey
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Dear Ms. or Mr Visitor</h5>
+    <p class="card-text mx-5">In here you can create the forms you need, for clients, coworkers or any specific user.<br>   
+    First you need to create a new form, add its name and description, taking in mind its content shoulld all be related to the same objective you attend to work on.
+    Second you can hek out the existing surveys related to your needs, ir simply reate a new one using the available questions or new ones from your prepered list.<br>
+    Afterwards this form will be saved and, the concered visitor will be able to answer it, and you can display the response of each user.<br>
+    Take a look by logging in first if your an admin.
+    If your a client yu can log in or register if your new here, and answer the forms that will help you understand your needs.</p>
+    <div class="text-center">
+    <a href="{{ path('app_login') }}" class="btn btn-primary">Sign in</a>
+  </div>
+  </div>
+</div>
 </div>
 {% endblock %}
