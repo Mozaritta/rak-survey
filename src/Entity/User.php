@@ -6,12 +6,16 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Traits\Timestamp;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use Timestamp;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -21,6 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message = "Email cannot be blank")
      */
     private $email;
 
@@ -32,8 +37,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message = "Password cannot be blank")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "First name cannot be blank")
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Last name cannot be blank")
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $CIN;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $agency;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $division;
 
     public function getId(): ?int
     {
@@ -139,5 +182,89 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getFullName()
     {
         return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getCIN(): ?string
+    {
+        return $this->CIN;
+    }
+
+    public function setCIN(string $CIN): self
+    {
+        $this->CIN = $CIN;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getAgency(): ?string
+    {
+        return $this->agency;
+    }
+
+    public function setAgency(?string $agency): self
+    {
+        $this->agency = $agency;
+
+        return $this;
+    }
+
+    public function getDivision(): ?string
+    {
+        return $this->division;
+    }
+
+    public function setDivision(?string $division): self
+    {
+        $this->division = $division;
+
+        return $this;
     }
 }
