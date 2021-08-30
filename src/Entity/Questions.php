@@ -45,6 +45,11 @@ class Questions
      */
     private $survey;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Answer::class, mappedBy="question", cascade={"persist", "remove"})
+     */
+    private $answer;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,6 +99,23 @@ class Questions
     public function setSurvey(?Survey $survey): self
     {
         $this->survey = $survey;
+
+        return $this;
+    }
+
+    public function getAnswer(): ?Answer
+    {
+        return $this->answer;
+    }
+
+    public function setAnswer(Answer $answer): self
+    {
+        // set the owning side of the relation if necessary
+        if ($answer->getQuestion() !== $this) {
+            $answer->setQuestion($this);
+        }
+
+        $this->answer = $answer;
 
         return $this;
     }

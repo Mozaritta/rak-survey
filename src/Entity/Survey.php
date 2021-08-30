@@ -40,6 +40,11 @@ class Survey
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Form::class, inversedBy="survey")
+     */
+    private $form;
+
     public function __construct()
     {
         $this->question = new ArrayCollection();
@@ -100,6 +105,18 @@ class Survey
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getForm(): ?Form
+    {
+        return $this->form;
+    }
+
+    public function setForm(?Form $form): self
+    {
+        $this->form = $form;
 
         return $this;
     }
