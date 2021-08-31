@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Traits\Timestamp;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -46,9 +48,29 @@ class Questions
     private $survey;
 
     /**
-     * @ORM\OneToOne(targetEntity=Answer::class, mappedBy="question", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="question")
      */
-    private $answer;
+    private $answers;
+
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
+    //  */
+    // private $answers;
+
+    // public function __construct()
+    // {
+    //     $this->answers = new ArrayCollection();
+    // }
+
+    // /**
+    //  * @ORM\OneToOne(targetEntity=Answer::class, mappedBy="question", cascade={"persist", "remove"})
+    //  */
+    // private $answer;
 
     public function getId(): ?int
     {
@@ -103,19 +125,79 @@ class Questions
         return $this;
     }
 
-    public function getAnswer(): ?Answer
+    // // public function getAnswer(): ?Answer
+    // // {
+    // //     return $this->answer;
+    // // }
+
+    // // public function setAnswer(Answer $answer): self
+    // // {
+    // //     // set the owning side of the relation if necessary
+    // //     if ($answer->getQuestion() !== $this) {
+    // //         $answer->setQuestion($this);
+    // //     }
+
+    // //     $this->answer = $answer;
+
+    // //     return $this;
+    // // }
+
+    // /**
+    //  * @return Collection|Answer[]
+    //  */
+    // public function getAnswers(): Collection
+    // {
+    //     return $this->answers;
+    // }
+
+    // public function addAnswer(Answer $answer): self
+    // {
+    //     if (!$this->answers->contains($answer)) {
+    //         $this->answers[] = $answer;
+    //         $answer->setQuestion($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeAnswer(Answer $answer): self
+    // {
+    //     if ($this->answers->removeElement($answer)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($answer->getQuestion() === $this) {
+    //             $answer->setQuestion(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection|Answers[]
+     */
+    public function getAnswers(): Collection
     {
-        return $this->answer;
+        return $this->answers;
     }
 
-    public function setAnswer(Answer $answer): self
+    public function addAnswer(Answers $answer): self
     {
-        // set the owning side of the relation if necessary
-        if ($answer->getQuestion() !== $this) {
+        if (!$this->answers->contains($answer)) {
+            $this->answers[] = $answer;
             $answer->setQuestion($this);
         }
 
-        $this->answer = $answer;
+        return $this;
+    }
+
+    public function removeAnswer(Answers $answer): self
+    {
+        if ($this->answers->removeElement($answer)) {
+            // set the owning side to null (unless already changed)
+            if ($answer->getQuestion() === $this) {
+                $answer->setQuestion(null);
+            }
+        }
 
         return $this;
     }

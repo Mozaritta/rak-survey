@@ -462,8 +462,9 @@ class QstController extends AbstractController
     {
         if ($authenticationUtils->getLastUsername()) {
             // dd($idd, $id);
-            $srv = $surveyRepository->findOneBy(['id' => $idd]);
-            $frm = $formRepository->findOneBy(['id' => $id]);
+            $srv = $surveyRepository->findOneBy(['id' => $id]);
+            $frm = $formRepository->findOneBy(['id' => $idd]);
+            // dd($id);
             $frm->addSurvey($srv);
             $em->flush();
             $message = 'Survey added to form successfully';
@@ -471,7 +472,7 @@ class QstController extends AbstractController
                 'primary',
                 $message
             );
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('show_surveys');
         } else {
             return $this->render('qst/valid.html.twig');
         }
@@ -486,10 +487,11 @@ class QstController extends AbstractController
     public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findOneBy(['id' => 1]);
+            $frm = $formRepository->findOneBy(['id' => 3]);
             // dd($frm->getSurvey());
-            $srvs = $surveyRepository->findBy(['form' => !null]);
-            for ($i = 0; $i < 2; $i++) {
+            $srvs = $surveyRepository->findBy(['form' => 3]);
+            // dd($srvs);
+            for ($i = 0; $i < 3; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['survey' => $srvs[$i]->getId()]);
             }
             $error = $authenticationUtils->getLastAuthenticationError();
@@ -511,12 +513,19 @@ class QstController extends AbstractController
             for ($i = 0; $i < sizeof($qst); $i++) {
                 $id = $qst[$i]->getId();
                 // dd("check$id");
-                $name[$i] = $request->query->get("flexRadioDefault$id");
+                $name[$i] = $request->query->get("check$id");
+                if ($name[$i] == null) {
+                    $name[$i] = 'No';
+                }
+                if (is_array($name[$i])) {
+                    $name[$i] = 'Yes';
+                }
+                // dd($name[$i]);
                 $connection = mysqli_connect("localhost", "root", "", "raksurvey");
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
-                $query = "INSERT INTO answer (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
+                $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
                 if (mysqli_query($connection, $query)) {
                     echo "New record created successfully";
                 } else {

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Answer;
+use App\Entity\Answers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Answer|null find($id, $lockMode = null, $lockVersion = null)
- * @method Answer|null findOneBy(array $criteria, array $orderBy = null)
- * @method Answer[]    findAll()
- * @method Answer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Answers|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Answers|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Answers[]    findAll()
+ * @method Answers[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnswerRepository extends ServiceEntityRepository
+class AnswersRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Answer::class);
+        parent::__construct($registry, Answers::class);
     }
 
     // /**
-    //  * @return Answer[] Returns an array of Answer objects
+    //  * @return Answers[] Returns an array of Answers objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class AnswerRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Answer
+    public function findOneBySomeField($value): ?Answers
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

@@ -84,9 +84,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $division;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="client")
+     * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="client", orphanRemoval=true)
      */
     private $answers;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="client")
+    //  */
+    // private $answers;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="client")
+    //  */
+    // private $answers;
 
     public function __construct()
     {
@@ -283,15 +293,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // // /**
+    // //  * @return Collection|Answer[]
+    // //  */
+    // // public function getAnswers(): Collection
+    // // {
+    // //     return $this->answers;
+    // // }
+
+    // // public function addAnswer(Answer $answer): self
+    // // {
+    // //     if (!$this->answers->contains($answer)) {
+    // //         $this->answers[] = $answer;
+    // //         $answer->setClient($this);
+    // //     }
+
+    // //     return $this;
+    // // }
+
+    // // public function removeAnswer(Answer $answer): self
+    // // {
+    // //     if ($this->answers->removeElement($answer)) {
+    // //         // set the owning side to null (unless already changed)
+    // //         if ($answer->getClient() === $this) {
+    // //             $answer->setClient(null);
+    // //         }
+    // //     }
+
+    // //     return $this;
+    // // }
+
+    // /**
+    //  * @return Collection|Answer[]
+    //  */
+    // public function getAnswers(): Collection
+    // {
+    //     return $this->answers;
+    // }
+
+    // public function addAnswer(Answer $answer): self
+    // {
+    //     if (!$this->answers->contains($answer)) {
+    //         $this->answers[] = $answer;
+    //         $answer->setClient($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeAnswer(Answer $answer): self
+    // {
+    //     if ($this->answers->removeElement($answer)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($answer->getClient() === $this) {
+    //             $answer->setClient(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
     /**
-     * @return Collection|Answer[]
+     * @return Collection|Answers[]
      */
     public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
-    public function addAnswer(Answer $answer): self
+    public function addAnswer(Answers $answer): self
     {
         if (!$this->answers->contains($answer)) {
             $this->answers[] = $answer;
@@ -301,7 +371,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeAnswer(Answer $answer): self
+    public function removeAnswer(Answers $answer): self
     {
         if ($this->answers->removeElement($answer)) {
             // set the owning side to null (unless already changed)
