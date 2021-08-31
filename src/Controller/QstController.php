@@ -492,9 +492,46 @@ class QstController extends AbstractController
             for ($i = 0; $i < 2; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['survey' => $srvs[$i]->getId()]);
             }
-            return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts'));
+            $error = $authenticationUtils->getLastAuthenticationError();
+            return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts', 'error'));
         } else {
             return $this->render('qst/valid.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/result", name="set_answer")
+     */
+    public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $user = $this->getUser()->getId();
+            // if (isset($_POST['answers'])) {
+            $qst = $qstRepository->findAll();
+            for ($i = 0; $i < sizeof($qst); $i++) {
+                $id = $qst[$i]->getId();
+                // dd("check$id");
+                $name[$i] = $request->query->get("flexRadioDefault$id");
+                $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                if (!$connection) {
+                    die("Connection failed: " . mysqli_connect_error());
+                }
+                $query = "INSERT INTO answer (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
+                if (mysqli_query($connection, $query)) {
+                    echo "New record created successfully";
+                } else {
+                    echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                }
+
+                mysqli_close($connection);
+            }
+            // dd($name);
+            return $this->render('test.html.twig', compact('name'));
+            // } else {
+            //     return $this->redirectToRoute('app_home');
+            // }
+        } else {
+            return $this->redirectToRoute('app_home');
         }
     }
 }
