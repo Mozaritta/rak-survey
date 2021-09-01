@@ -18,7 +18,7 @@ class QuestionsType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, ['required' => true])
-            ->add('valid', CheckboxType::class, ['value' => false]) //, 'disabled' => true]) // disabled fot the client but should be enabled for admins
+            ->add('valid', CheckboxType::class, ['value' => false]) //, 'disabled' => true]) // disabled for the client but should be enabled for admins
             ->add('type', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => 'name'

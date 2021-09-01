@@ -88,19 +88,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $answers;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="client")
-    //  */
-    // private $answers;
+    /**
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="user")
+     */
+    private $questions;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="client")
-    //  */
-    // private $answers;
+    /**
+     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="users")
+     */
+    private $role;
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->role = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,9 +145,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $userRoles = $this->getRole();
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        foreach ($userRoles as $userRole) {
+            $roles[] = $userRole->getRoleName();
+        }
 
         return array_unique($roles);
     }
@@ -293,65 +297,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // // /**
-    // //  * @return Collection|Answer[]
-    // //  */
-    // // public function getAnswers(): Collection
-    // // {
-    // //     return $this->answers;
-    // // }
-
-    // // public function addAnswer(Answer $answer): self
-    // // {
-    // //     if (!$this->answers->contains($answer)) {
-    // //         $this->answers[] = $answer;
-    // //         $answer->setClient($this);
-    // //     }
-
-    // //     return $this;
-    // // }
-
-    // // public function removeAnswer(Answer $answer): self
-    // // {
-    // //     if ($this->answers->removeElement($answer)) {
-    // //         // set the owning side to null (unless already changed)
-    // //         if ($answer->getClient() === $this) {
-    // //             $answer->setClient(null);
-    // //         }
-    // //     }
-
-    // //     return $this;
-    // // }
-
-    // /**
-    //  * @return Collection|Answer[]
-    //  */
-    // public function getAnswers(): Collection
-    // {
-    //     return $this->answers;
-    // }
-
-    // public function addAnswer(Answer $answer): self
-    // {
-    //     if (!$this->answers->contains($answer)) {
-    //         $this->answers[] = $answer;
-    //         $answer->setClient($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeAnswer(Answer $answer): self
-    // {
-    //     if ($this->answers->removeElement($answer)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($answer->getClient() === $this) {
-    //             $answer->setClient(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
 
     /**
      * @return Collection|Answers[]
@@ -379,6 +324,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $answer->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questions[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Questions $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Questions $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getUser() === $this) {
+                $question->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getRole(): Collection
+    {
+        return $this->role;
+    }
+
+    public function addRole(Role $role): self
+    {
+        if (!$this->role->contains($role)) {
+            $this->role[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        $this->role->removeElement($role);
 
         return $this;
     }

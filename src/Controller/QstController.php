@@ -5,15 +5,19 @@ namespace App\Controller;
 use App\Entity\Form;
 use App\Entity\Questions;
 use App\Entity\Survey;
+use App\Entity\Type;
 use App\Form\FormType;
 use App\Form\QuestionsType;
 use App\Form\SurveyType;
 use App\Repository\FormRepository;
 use App\Repository\QuestionsRepository;
 use App\Repository\SurveyRepository;
+use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 // use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,12 +74,25 @@ class QstController extends AbstractController
     /**
      * @Route("/add", name="add_qst", methods="GET|POST")
      */
-    public function addQst(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
+    public function addQst(AuthenticationUtils $authenticationUtils, TypeRepository $typeRepository, Request $request, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $question = new Questions;
-            $form = $this->createForm(QuestionsType::class, $question);
-            $form->handleRequest($request);
+            if ($this->isGranted('ROLE_USER')) {
+                $type = $typeRepository->findOneBy(['name' => "TextField"]);
+                $question->setType($type);
+                $question->setValid(false);
+                $question->setUser($this->getUser());
+                $form = $this->createFormBuilder($question)
+                    ->add('description', TextareaType::class)
+                    ->add('valid', CheckboxType::class, ['value' => false, 'disabled' => true])
+                    ->getForm();
+                $form->handleRequest(($request));
+            } else if ($this->isGranted('ROLE_ADMIN')) {
+                $form = $this->createForm(QuestionsType::class, $question);
+                $form->handleRequest($request);
+            }
+
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->persist($question);
