@@ -255,7 +255,7 @@ class AdminController extends AbstractController
                 );
                 return $this->redirectToRoute('show_forms');
             }
-            return $this->render('section/create.html.twig', [
+            return $this->render('form/new.html.twig', [
                 'form' => $form->createView()
             ]);
         } else {
