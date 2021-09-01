@@ -230,15 +230,7 @@ class AdminController extends AbstractController
     ////// END SURVEY CRUD /////////////////////////
 
     ////// FORM CRUD /////////////////////////
-    /**
-     * @Route("/admin", name="admin")
-     */
-    public function index(): Response
-    {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
+
 
     /**
      * @Route("/new}", name="add_form")

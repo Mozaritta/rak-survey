@@ -51,7 +51,7 @@ class QstController extends AbstractController
             return $this->render('qst/index.html.twig', compact('qsts', 'srvs')); //, 'test'));
 
         } else {
-            dump($authenticationUtils->getLastUsername());
+            // dump($authenticationUtils->getLastUsername());
             return $this->render('qst/valid.html.twig');
         }
     }
@@ -66,7 +66,7 @@ class QstController extends AbstractController
         if ($authenticationUtils->getLastUsername()) {
             return $this->redirectToRoute('valid_qst');
         } else {
-            dump($authenticationUtils->getLastUsername());
+            // dump($authenticationUtils->getLastUsername());
             return $this->render('qst/valid.html.twig');
         }
     }
