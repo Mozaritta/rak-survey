@@ -175,18 +175,26 @@ class QstController extends AbstractController
     ////// ANSWER THE FORM  /////////////////////////
 
     /**
-     * @Route("/answer", name="answer_form")
+     * @Route("/answer", name="answer_form") // should send the id of the specific form to answer
      */
     public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findOneBy(['id' => 3]);
+            $frm = $formRepository->findOneBy(['id' => 4]);
             // dd($frm->getSection());
-            $srvs = $sectionRepository->findBy(['form' => 3]);
+            $srvs = $sectionRepository->findBy(['form' => 4]);
             // dd($srvs);
-            for ($i = 0; $i < 3; $i++) {
+            for ($i = 0; $i < 1; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['section' => $srvs[$i]->getId()]);
             }
+            // dd(sizeof($qsts[0]));
+            if (sizeof($qsts[0]) == 0) {
+                $this->addFlash('danger', 'No questions in the section');
+            }
+            // foreach ($srvs as $test) {
+            //     $qsts = $qstRepository->findOneBy(['section' => $test->getId()]);
+            // }
+            // dd($qsts);
             $error = $authenticationUtils->getLastAuthenticationError();
             return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts', 'error'));
         } else {

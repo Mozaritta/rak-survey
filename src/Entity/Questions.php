@@ -131,53 +131,6 @@ class Questions
         return $this;
     }
 
-    // // public function getAnswer(): ?Answer
-    // // {
-    // //     return $this->answer;
-    // // }
-
-    // // public function setAnswer(Answer $answer): self
-    // // {
-    // //     // set the owning side of the relation if necessary
-    // //     if ($answer->getQuestion() !== $this) {
-    // //         $answer->setQuestion($this);
-    // //     }
-
-    // //     $this->answer = $answer;
-
-    // //     return $this;
-    // // }
-
-    // /**
-    //  * @return Collection|Answer[]
-    //  */
-    // public function getAnswers(): Collection
-    // {
-    //     return $this->answers;
-    // }
-
-    // public function addAnswer(Answer $answer): self
-    // {
-    //     if (!$this->answers->contains($answer)) {
-    //         $this->answers[] = $answer;
-    //         $answer->setQuestion($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeAnswer(Answer $answer): self
-    // {
-    //     if ($this->answers->removeElement($answer)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($answer->getQuestion() === $this) {
-    //             $answer->setQuestion(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
     /**
      * @return Collection|Answers[]
      */
