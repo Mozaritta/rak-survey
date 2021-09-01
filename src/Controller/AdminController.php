@@ -130,7 +130,7 @@ class AdminController extends AbstractController
                     'primary',
                     'Section created successfully'
                 );
-                return $this->redirectToRoute('show_form');
+                return $this->redirectToRoute('show_sections');
             }
             return $this->render('section/create.html.twig', [
                 'form' => $form->createView()
