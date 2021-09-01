@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Questions;
-use App\Entity\Survey;
+use App\Entity\Section;
 use App\Entity\Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -23,8 +23,8 @@ class QuestionsType extends AbstractType
                 'class' => Type::class,
                 'choice_label' => 'name'
             ])
-            ->add('survey', EntityType::class, [
-                'class' => Survey::class,
+            ->add('section', EntityType::class, [
+                'class' => Section::class,
                 'choice_label' => 'name',
                 'expanded' => 'true'
             ]);

@@ -14,18 +14,18 @@ final class Version20210826130425 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add description to survey';
+        return 'Add description to section';
     }
 
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE survey ADD description VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE section ADD description VARCHAR(255) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE survey DROP description');
+        $this->addSql('ALTER TABLE section DROP description');
     }
 }

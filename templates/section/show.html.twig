@@ -11,37 +11,37 @@
 <div class="example-wrapper">
     <h1 class="text-center">Show All Forms ✅</h1>
 <div class="row row-cols-1 row-cols-md-2 g-2">
-{% for survey in srv %}
+{% for section in srv %}
     <div class="col">
         <div class="card h-100 border-primary mb-3">
             {# <img src="asset('/assets/images/images.png')" class="card-img-top" alt="..."> #}
             <div class="card-body">
-            <h5 class="card-title text-primary text-center py-3 fs-2">{{survey.name}}</h5>
-            {% if survey.description %}
-                <p class="card-text pb-2">{{survey.description}}.                
+            <h5 class="card-title text-primary text-center py-3 fs-2">{{section.name}}</h5>
+            {% if section.description %}
+                <p class="card-text pb-2">{{section.description}}.                
             {% else %}
-                <p class="card-text pb-2 text-muted">No description addeed for this survey for the moment.                
+                <p class="card-text pb-2 text-muted">No description addeed for this section for the moment.                
             {% endif %}
                 </p>
-                <figcaption class="blockquote-footer" style="position:absolute;bottom:90px;">Number of questions:{{survey.question.count}}</figcaption>
+                <figcaption class="blockquote-footer" style="position:absolute;bottom:90px;">Number of questions:{{section.question.count}}</figcaption>
             </div>
             <div class="card-footer text-center bg-white ">
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
-            {% if survey.form is same as null %}
+            {% if section.form is same as null %}
             <a type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">+</a>
                 <ul class="dropdown-menu">                
                     {% for form in frm %}
-                        <li><a class="dropdown-item" href="{{ (path('insert_srv', {idd: form.id, id:survey.id})) }}">{{form.name}}</a></li>
+                        <li><a class="dropdown-item" href="{{ (path('insert_srv', {idd: form.id, id:section.id})) }}">{{form.name}}</a></li>
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <a href="{{ path('view_survey', {id: survey.id}) }}" type="button" class="btn btn-primary ">View</a>
-                <a href="{{ path('update_survey', {id: survey.id}) }}" type="button" class="btn btn-success ">Update</a>
-                <a href="{{ path('delete_survey', {id: survey.id}) }}" onclick="return confirm('You sure you want to delete?')" type="button" class="btn btn-danger">Delete</a>
+                <a href="{{ path('view_section', {id: section.id}) }}" type="button" class="btn btn-primary ">View</a>
+                <a href="{{ path('update_section', {id: section.id}) }}" type="button" class="btn btn-success ">Update</a>
+                <a href="{{ path('delete_section', {id: section.id}) }}" onclick="return confirm('You sure you want to delete?')" type="button" class="btn btn-danger">Delete</a>
             </div>            
             </div>
             <div class="card-footer">
-                <small class="text-muted border-primary">Last updated {{survey.updatedAt|ago}}</small>
+                <small class="text-muted border-primary">Last updated {{section.updatedAt|ago}}</small>
             </div>
         </div>
     </div>

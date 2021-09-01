@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Survey;
+use App\Entity\Section;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SurveyType extends AbstractType
+class SectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,7 +19,7 @@ class SurveyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Survey::class,
+            'data_class' => Section::class,
         ]);
     }
 }

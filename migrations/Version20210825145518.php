@@ -20,9 +20,9 @@ final class Version20210825145518 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE questions ADD survey_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE questions ADD CONSTRAINT FK_8ADC54D5B3FE509D FOREIGN KEY (survey_id) REFERENCES survey (id)');
-        $this->addSql('CREATE INDEX IDX_8ADC54D5B3FE509D ON questions (survey_id)');
+        $this->addSql('ALTER TABLE questions ADD section_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE questions ADD CONSTRAINT FK_8ADC54D5B3FE509D FOREIGN KEY (section_id) REFERENCES section (id)');
+        $this->addSql('CREATE INDEX IDX_8ADC54D5B3FE509D ON questions (section_id)');
     }
 
     public function down(Schema $schema): void
@@ -30,6 +30,6 @@ final class Version20210825145518 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE questions DROP FOREIGN KEY FK_8ADC54D5B3FE509D');
         $this->addSql('DROP INDEX IDX_8ADC54D5B3FE509D ON questions');
-        $this->addSql('ALTER TABLE questions DROP survey_id');
+        $this->addSql('ALTER TABLE questions DROP section_id');
     }
 }

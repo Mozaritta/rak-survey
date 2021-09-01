@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Form;
 use App\Entity\Questions;
-use App\Entity\Survey;
+use App\Entity\Section;
 use App\Entity\Type;
 use App\Form\FormType;
 use App\Form\QuestionsType;
-use App\Form\SurveyType;
+use App\Form\SectionType;
 use App\Repository\FormRepository;
 use App\Repository\QuestionsRepository;
-use App\Repository\SurveyRepository;
+use App\Repository\SectionRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 // use Knp\Component\Pager\PaginatorInterface;
@@ -31,15 +31,15 @@ class QstController extends AbstractController
      */
     public function valid(
         QuestionsRepository $qstRepository,
-        SurveyRepository $surveyRepository,
+        SectionRepository $sectionRepository,
         AuthenticationUtils $authenticationUtils
         // ,PaginatorInterface $paginator,
         // Request $request
     ): Response {
         if ($authenticationUtils->getLastUsername()) {
-            $srvs = $surveyRepository->findBy([], ['createdAt' => 'DESC']);
+            $srvs = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
             $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-            // $data = $surveyRepository->findAll();
+            // $data = $sectionRepository->findAll();
             // $test = $paginator->paginate(
             //     $data,
             //     /**query Not result */
@@ -113,44 +113,44 @@ class QstController extends AbstractController
 
 
     ////// END QST CRUD /////////////////////////
-    ////// SURVEY CRUD /////////////////////////
+    ////// SECTION CRUD /////////////////////////
 
     /**
-     * @Route("/view/{id<[0-9]+>}", name="view_survey")
+     * @Route("/view/{id<[0-9]+>}", name="view_section")
      */
-    public function viewSurvey(AuthenticationUtils $authenticationUtils, Request $request, int $id, QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
+    public function viewSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $qsts = $qstRepository->findBy(['survey' => $id], ['createdAt' => 'DESC']);
-            $srv = $surveyRepository->findOneBy(['id' => $id]);
-            return $this->render('survey/view.html.twig', compact('qsts', 'srv'));
+            $qsts = $qstRepository->findBy(['section' => $id], ['createdAt' => 'DESC']);
+            $srv = $sectionRepository->findOneBy(['id' => $id]);
+            return $this->render('section/view.html.twig', compact('qsts', 'srv'));
         } else {
             return $this->render('qst/valid.html.twig');
         }
     }
 
     /**
-     * @Route("/survey", name="show_surveys")
+     * @Route("/section", name="show_sections")
      */
-    public function showSurveys(AuthenticationUtils $authenticationUtils, SurveyRepository $srvRepository, FormRepository $formRepository): Response
+    public function showSections(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, FormRepository $formRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $srv = $srvRepository->findBy([], ['createdAt' => 'DESC']);
             $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
-            return $this->render('survey/show.html.twig', compact('srv', 'frm'));
+            return $this->render('section/show.html.twig', compact('srv', 'frm'));
         } else {
             return $this->render('qst/valid.html.twig');
         }
     }
 
 
-    ////// END SURVEY CRUD /////////////////////////
+    ////// END SECTION CRUD /////////////////////////
     ////// FORM CRUD /////////////////////////
 
     /**
      * @Route("/form/view/{id<[0-9]+>}", name="view_form")
      */
-    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SurveyRepository $srvRepository): Response
+    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $srvRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $srvs = $srvRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
@@ -182,15 +182,15 @@ class QstController extends AbstractController
     /**
      * @Route("/answer", name="answer_form")
      */
-    public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SurveyRepository $surveyRepository): Response
+    public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $frm = $formRepository->findOneBy(['id' => 3]);
-            // dd($frm->getSurvey());
-            $srvs = $surveyRepository->findBy(['form' => 3]);
+            // dd($frm->getSection());
+            $srvs = $sectionRepository->findBy(['form' => 3]);
             // dd($srvs);
             for ($i = 0; $i < 3; $i++) {
-                $qsts[$i] = $qstRepository->findBy(['survey' => $srvs[$i]->getId()]);
+                $qsts[$i] = $qstRepository->findBy(['section' => $srvs[$i]->getId()]);
             }
             $error = $authenticationUtils->getLastAuthenticationError();
             return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts', 'error'));
@@ -219,15 +219,22 @@ class QstController extends AbstractController
                     $name[$i] = 'Yes';
                 }
                 // dd($name[$i]);
-                $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                $connection = mysqli_connect("localhost", "root", "", "raksection");
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
                 $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
                 if (mysqli_query($connection, $query)) {
-                    echo "New record created successfully";
+                    $this->addFlash(
+                        'success',
+                        'You answers wer stocked successfully'
+                    );
                 } else {
-                    echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                    $this->addFlash(
+                        'danger',
+                        mysqli_error($connection)
+                    );
+                    // echo "Error: " . $query . "<br>" . mysqli_error($connection);
                 }
 
                 mysqli_close($connection);

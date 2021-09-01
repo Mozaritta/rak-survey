@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title 'Edit Survey' ~ srv.id %}
+{% block title 'Edit Section' ~ srv.id %}
 
 {% block body %}
 <div class="container">
@@ -8,7 +8,7 @@
 
     <div class="col-3"></div>
     <div class="col-6">
-    <h1 class="text-4xl mb-4 dark:text-white text-center">Edit Survey {{ srv.id }}</h1>
+    <h1 class="text-4xl mb-4 dark:text-white text-center">Edit Section {{ srv.id }}</h1>
     {{ include('/layouts/partials/_form.html.twig')}}
 </div>
 </div>

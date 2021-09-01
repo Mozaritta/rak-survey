@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\SurveyRepository;
+use App\Repository\SectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,10 +10,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Traits\Timestamp;
 
 /**
- * @ORM\Entity(repositoryClass=SurveyRepository::class)
+ * @ORM\Entity(repositoryClass=SectionRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
-class Survey
+class Section
 {
     use Timestamp;
     /**
@@ -31,7 +31,7 @@ class Survey
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="survey")
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="section")
      */
     private $question;
 
@@ -41,7 +41,7 @@ class Survey
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Form::class, inversedBy="survey")
+     * @ORM\ManyToOne(targetEntity=Form::class, inversedBy="section")
      */
     private $form;
 
@@ -79,7 +79,7 @@ class Survey
     {
         if (!$this->question->contains($question)) {
             $this->question[] = $question;
-            $question->setSurvey($this);
+            $question->setSection($this);
         }
 
         return $this;
@@ -89,8 +89,8 @@ class Survey
     {
         if ($this->question->removeElement($question)) {
             // set the owning side to null (unless already changed)
-            if ($question->getSurvey() === $this) {
-                $question->setSurvey(null);
+            if ($question->getSection() === $this) {
+                $question->setSection(null);
             }
         }
 

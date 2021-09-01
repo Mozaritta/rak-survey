@@ -24,9 +24,9 @@ class Form
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Survey::class, mappedBy="form")
+     * @ORM\OneToMany(targetEntity=Section::class, mappedBy="form")
      */
-    private $survey;
+    private $section;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -41,7 +41,7 @@ class Form
 
     public function __construct()
     {
-        $this->survey = new ArrayCollection();
+        $this->section = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,29 +50,29 @@ class Form
     }
 
     /**
-     * @return Collection|Survey[]
+     * @return Collection|Section[]
      */
-    public function getSurvey(): Collection
+    public function getSection(): Collection
     {
-        return $this->survey;
+        return $this->section;
     }
 
-    public function addSurvey(Survey $survey): self
+    public function addSection(Section $section): self
     {
-        if (!$this->survey->contains($survey)) {
-            $this->survey[] = $survey;
-            $survey->setForm($this);
+        if (!$this->section->contains($section)) {
+            $this->section[] = $section;
+            $section->setForm($this);
         }
 
         return $this;
     }
 
-    public function removeSurvey(Survey $survey): self
+    public function removeSection(Section $section): self
     {
-        if ($this->survey->removeElement($survey)) {
+        if ($this->section->removeElement($section)) {
             // set the owning side to null (unless already changed)
-            if ($survey->getForm() === $this) {
-                $survey->setForm(null);
+            if ($section->getForm() === $this) {
+                $section->setForm(null);
             }
         }
 

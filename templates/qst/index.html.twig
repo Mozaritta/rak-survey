@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title %}Rak Survey!{% endblock %}
+{% block title %}Rak Section!{% endblock %}
 
 {% block body %}
 <style> 
@@ -19,7 +19,7 @@
             </li>
         </div>
         
-        {% if qst.survey is same as null %}
+        {% if qst.section is same as null %}
         {% if is_granted('ROLE_ADMIN') %}
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
                 <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Add To</a>
@@ -32,8 +32,8 @@
                 <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
                 <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content="Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}}
-                {% if qst.survey is not same as null %}
-            In survey: {{qst.survey.name}}
+                {% if qst.section is not same as null %}
+            In section: {{qst.section.name}}
             {% endif %}">Info</a>
             </div>
         {% else %}
@@ -42,8 +42,8 @@
                 <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
                 <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
                 
-                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content=" {% if qst.survey is not same as null %}
-            In survey: {{qst.survey.name}}
+                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content=" {% if qst.section is not same as null %}
+            In section: {{qst.section.name}}
             {% endif %} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}} ">Info</a>
             </div>
         {% endif %}

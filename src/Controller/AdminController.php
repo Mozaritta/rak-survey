@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Form\SectionType;
 use App\Entity\Form;
-use App\Entity\Survey;
+use App\Entity\Section;
+use App\Entity\Type;
+use App\Form\FormType;
 use App\Repository\FormRepository;
 use App\Repository\QuestionsRepository;
-use App\Repository\SurveyRepository;
+use App\Repository\SectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
+// use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -108,27 +112,27 @@ class AdminController extends AbstractController
     }
 
     ////// END QUESTION CRUD /////////////////////////
-    ////// SURVEY CRUD /////////////////////////
+    ////// SECTION CRUD /////////////////////////
     /**
-     * @Route("/create", name="add_survey", methods="GET|POST")
+     * @Route("/create", name="add_section", methods="GET|POST")
      */
-    public function createSurvey(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
+    public function createSection(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $survey = new Survey;
-            $form = $this->createForm(SurveyType::class, $survey);
+            $section = new Section;
+            $form = $this->createForm(SectionType::class, $section);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em->persist($survey);
+                $em->persist($section);
                 $em->flush();
                 $this->addFlash(
                     'primary',
-                    'Survey created successfully'
+                    'Section created successfully'
                 );
                 return $this->redirectToRoute('show_form');
             }
-            return $this->render('survey/create.html.twig', [
+            return $this->render('section/create.html.twig', [
                 'form' => $form->createView()
             ]);
         } else {
@@ -137,24 +141,24 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/update/{id<[0-9]+>}", name="update_survey"))
+     * @Route("/update/{id<[0-9]+>}", name="update_section"))
      */
-    public function updateSurvey(AuthenticationUtils $authenticationUtils, Request $request, int $id, SurveyRepository $srvRepository, EntityManagerInterface $em): Response
+    public function updateSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, SectionRepository $srvRepository, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $srv = $srvRepository->findOneBy(['id' => $id]);
-            $form = $this->createForm(SurveyType::class, $srv);
+            $form = $this->createForm(SectionType::class, $srv);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->flush();
                 $this->addFlash(
                     'success',
-                    'Survey updated successfully'
+                    'Section updated successfully'
                 );
-                return $this->redirectToRoute('show_surveys');
+                return $this->redirectToRoute('show_sections');
             }
-            return $this->render('survey/update.html.twig', [
+            return $this->render('section/update.html.twig', [
                 'srv' => $srv,
                 'form' => $form->createView()
             ]);
@@ -164,15 +168,15 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id<[0-9]+>}", name="delete_survey")
+     * @Route("/delete/{id<[0-9]+>}", name="delete_section")
      */
-    public function deleteSurvey(AuthenticationUtils $authenticationUtils, SurveyRepository $srvRepository, int $id, EntityManagerInterface $em): Response
+    public function deleteSection(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $srv = $srvRepository->findOneBy(['id' => $id]);
             $em->remove($srv);
             $em->flush();
-            $message = 'Survey deleted successfully';
+            $message = 'Section deleted successfully';
             $this->addFlash(
                 'danger',
                 $message
@@ -185,22 +189,22 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/delete/from/{id<[0-9]+>}", name="delete_from_survey")
+     * @Route("/delete/from/{id<[0-9]+>}", name="delete_from_section")
      */
-    public function deleteFromSurvey(AuthenticationUtils $authenticationUtils, SurveyRepository $surveyRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    public function deleteFromSection(AuthenticationUtils $authenticationUtils, SectionRepository $sectionRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $qst = $qstRepository->findOneBy(['id' => $id]);
-            $srv = $surveyRepository->findOneBy(['id' => $qst->getSurvey()]);
+            $srv = $sectionRepository->findOneBy(['id' => $qst->getSection()]);
             $srv->removeQuestion($qst);
             $em->flush();
-            $message = 'Question deleted from survey successfully';
+            $message = 'Question deleted from section successfully';
             $this->addFlash(
                 'success',
                 $message
             );
             // }
-            return $this->redirectToRoute('show_surveys');
+            return $this->redirectToRoute('show_sections');
         } else {
             return $this->render('qst/valid.html.twig');
         }
@@ -209,15 +213,15 @@ class AdminController extends AbstractController
     /**
      * @Route("/insert/{idd<[0-9]+>}/{id<[0-9]+>}", name="insert_qst")
      */
-    public function insertIntoSurvey(AuthenticationUtils $authenticationUtils, int $idd, SurveyRepository $surveyRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
+    public function insertIntoSection(AuthenticationUtils $authenticationUtils, int $idd, SectionRepository $sectionRepository, QuestionsRepository $qstRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             // dd($idd, $id);
             $qst = $qstRepository->findOneBy(['id' => $id]);
-            $srv = $surveyRepository->findOneBy(['id' => $idd]);
+            $srv = $sectionRepository->findOneBy(['id' => $idd]);
             $srv->addQuestion($qst);
             $em->flush();
-            $message = 'Question added to survey successfully';
+            $message = 'Question added to section successfully';
             $this->addFlash(
                 'primary',
                 $message
@@ -227,7 +231,7 @@ class AdminController extends AbstractController
             return $this->render('qst/valid.html.twig');
         }
     }
-    ////// END SURVEY CRUD /////////////////////////
+    ////// END SECTION CRUD /////////////////////////
 
     ////// FORM CRUD /////////////////////////
 
@@ -251,7 +255,7 @@ class AdminController extends AbstractController
                 );
                 return $this->redirectToRoute('show_forms');
             }
-            return $this->render('survey/create.html.twig', [
+            return $this->render('section/create.html.twig', [
                 'form' => $form->createView()
             ]);
         } else {
@@ -310,14 +314,14 @@ class AdminController extends AbstractController
     /**
      * @Route("/form/delete/from/{id<[0-9]+>}", name="delete_from_form")
      */
-    public function deleteFromForm(AuthenticationUtils $authenticationUtils, SurveyRepository $surveyRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
+    public function deleteFromForm(AuthenticationUtils $authenticationUtils, SectionRepository $sectionRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srv = $surveyRepository->findOneBy(['id' => $id]);
+            $srv = $sectionRepository->findOneBy(['id' => $id]);
             $frm = $formRepository->findOneBy(['id' => $srv->getForm()]);
-            $frm->removeSurvey($srv);
+            $frm->removeSection($srv);
             $em->flush();
-            $message = 'Survey deleted from form successfully';
+            $message = 'Section deleted from form successfully';
             $this->addFlash(
                 'success',
                 $message
@@ -332,21 +336,21 @@ class AdminController extends AbstractController
     /**
      * @Route("/form/insert/{idd<[0-9]+>}/{id<[0-9]+>}", name="insert_srv")
      */
-    public function insertIntoForm(AuthenticationUtils $authenticationUtils, int $idd, SurveyRepository $surveyRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
+    public function insertIntoForm(AuthenticationUtils $authenticationUtils, int $idd, SectionRepository $sectionRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             // dd($idd, $id);
-            $srv = $surveyRepository->findOneBy(['id' => $id]);
+            $srv = $sectionRepository->findOneBy(['id' => $id]);
             $frm = $formRepository->findOneBy(['id' => $idd]);
             // dd($id);
-            $frm->addSurvey($srv);
+            $frm->addSection($srv);
             $em->flush();
-            $message = 'Survey added to form successfully';
+            $message = 'Section added to form successfully';
             $this->addFlash(
                 'primary',
                 $message
             );
-            return $this->redirectToRoute('show_surveys');
+            return $this->redirectToRoute('show_sections');
         } else {
             return $this->render('qst/valid.html.twig');
         }

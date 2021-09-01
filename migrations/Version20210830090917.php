@@ -14,7 +14,7 @@ final class Version20210830090917 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add form and relation between survey question client and answer';
+        return 'Add form and relation between section question client and answer';
     }
 
     public function up(Schema $schema): void
@@ -24,18 +24,18 @@ final class Version20210830090917 extends AbstractMigration
         $this->addSql('CREATE TABLE form (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE answer ADD CONSTRAINT FK_DADD4A2519EB6921 FOREIGN KEY (client_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE answer ADD CONSTRAINT FK_DADD4A251E27F6BF FOREIGN KEY (question_id) REFERENCES questions (id)');
-        $this->addSql('ALTER TABLE survey ADD form_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE survey ADD CONSTRAINT FK_AD5F9BFC5FF69B7D FOREIGN KEY (form_id) REFERENCES form (id)');
-        $this->addSql('CREATE INDEX IDX_AD5F9BFC5FF69B7D ON survey (form_id)');
+        $this->addSql('ALTER TABLE section ADD form_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE section ADD CONSTRAINT FK_AD5F9BFC5FF69B7D FOREIGN KEY (form_id) REFERENCES form (id)');
+        $this->addSql('CREATE INDEX IDX_AD5F9BFC5FF69B7D ON section (form_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE survey DROP FOREIGN KEY FK_AD5F9BFC5FF69B7D');
+        $this->addSql('ALTER TABLE section DROP FOREIGN KEY FK_AD5F9BFC5FF69B7D');
         $this->addSql('DROP TABLE answer');
         $this->addSql('DROP TABLE form');
-        $this->addSql('DROP INDEX IDX_AD5F9BFC5FF69B7D ON survey');
-        $this->addSql('ALTER TABLE survey DROP form_id');
+        $this->addSql('DROP INDEX IDX_AD5F9BFC5FF69B7D ON section');
+        $this->addSql('ALTER TABLE section DROP form_id');
     }
 }

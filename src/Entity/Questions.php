@@ -43,9 +43,9 @@ class Questions
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Survey::class, inversedBy="question")
+     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="question")
      */
-    private $survey;
+    private $section;
 
     /**
      * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="question")
@@ -119,14 +119,14 @@ class Questions
         return $this;
     }
 
-    public function getSurvey(): ?Survey
+    public function getSection(): ?Section
     {
-        return $this->survey;
+        return $this->section;
     }
 
-    public function setSurvey(?Survey $survey): self
+    public function setSection(?Section $section): self
     {
-        $this->survey = $survey;
+        $this->section = $section;
 
         return $this;
     }
