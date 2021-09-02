@@ -2,20 +2,23 @@
 
 namespace App\Controller;
 
-use App\Form\SectionType;
 use App\Entity\Form;
-use App\Entity\Section;
 use App\Entity\Type;
 use App\Form\FormType;
+use App\Entity\Section;
+use App\Entity\Questions;
+use App\Form\SectionType;
+use App\Form\QuestionsType;
+use App\Repository\TypeRepository;
 use App\Repository\FormRepository;
-use App\Repository\QuestionsRepository;
 use App\Repository\SectionRepository;
+use App\Repository\QuestionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**

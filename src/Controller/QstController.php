@@ -180,9 +180,9 @@ class QstController extends AbstractController
     public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findOneBy(['id' => 4]);
+            $frm = $formRepository->findOneBy(['id' => 3]);
             // dd($frm->getSection());
-            $srvs = $sectionRepository->findBy(['form' => 4]);
+            $srvs = $sectionRepository->findBy(['form' => 3]);
             // dd($srvs);
             for ($i = 0; $i < 1; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['section' => $srvs[$i]->getId()]);
@@ -222,7 +222,7 @@ class QstController extends AbstractController
                     $name[$i] = 'Yes';
                 }
                 // dd($name[$i]);
-                $connection = mysqli_connect("localhost", "root", "", "raksection");
+                $connection = mysqli_connect("localhost", "root", "", "raksurvey");
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
