@@ -14,10 +14,8 @@
     {% for qst in pagination.items %}
         {% if qst.valid %}
             <div style="display:flex; flex-wrap:wrap;font-weight:bold; font-size:20px">
-            <li style="list-style: none;width:400px;"><textarea class="form-control bg-white my-2 shadow" disabled>{{ qst.description }}</textarea></li>
-            </li>
-        </div>
-        
+                <li style="list-style: none;width:400px;"><textarea class="form-control bg-white my-2 shadow" disabled>{{ qst.description }}</textarea></li>
+            </div>
         {% if qst.section is same as null %}
         {% if is_granted('ROLE_ADMIN') %}
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
@@ -28,9 +26,9 @@
                         <li><a class="dropdown-item" href="{{ (path('insert_qst', {idd: section.id, id:qst.id})) }}">{{section.name}}</a></li>
                     {% endfor %}
                 </ul>
-                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
-                <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
-                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content="Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}}
+                <a type="button" class="btn btn-outline-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                <a type="button" class="btn btn-outline-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
+                <a type="button" class="btn btn-outline-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content="Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}}
                 {% if qst.section is not same as null %}
             In section: {{qst.section.name}}
             {% endif %}">Info</a>
@@ -38,10 +36,10 @@
         {% else %}
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
         {% if is_granted('ROLE_ADMIN') %}
-                <a type="button" class="btn btn-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
-                <a type="button" class="btn btn-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
+                <a type="button" class="btn btn-outline-success" href="{{ path('update_qst', {id: qst.id}) }}">Update</a>
+                <a type="button" class="btn btn-outline-danger" href="{{ path('delete_qst', {id: qst.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>{% endif %}
                 
-                <a type="button" class="btn btn-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content=" {% if qst.section is not same as null %}
+                <a type="button" class="btn btn-outline-info" data-bs-container="body" title="Info" data-bs-placement="right" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-content=" {% if qst.section is not same as null %}
             In section: {{qst.section.name}}
             {% endif %} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Submitted : {{qst.createdAt|date}}  Type : {{qst.type.name}} ">Info</a>
             </div>
