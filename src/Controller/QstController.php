@@ -21,35 +21,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class QstController extends AbstractController
 {
-    /**
-     * @Route("/valid", name="valid_qst", methods="GET")
-     */
-    public function valid(
-        QuestionsRepository $qstRepository,
-        SectionRepository $sectionRepository,
-        AuthenticationUtils $authenticationUtils
-        // ,PaginatorInterface $paginator,
-        // Request $request
-    ): Response {
-        if ($authenticationUtils->getLastUsername()) {
-            $srvs = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
-            $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-            // $data = $sectionRepository->findAll();
-            // $test = $paginator->paginate(
-            //     $data,
-            //     /**query Not result */
-            //     $request->query->getInt('page', 1),
-            //     /**page number */
-            //     2
-            //     /**limit per page */
-            // );
-            return $this->render('qst/index.html.twig', compact('qsts', 'srvs')); //, 'test'));
-
-        } else {
-            // dump($authenticationUtils->getLastUsername());
-            return $this->render('anonymous/first.html.twig');
-        }
-    }
     ////// START QST CRUD /////////////////////////
 
     /**
@@ -128,10 +99,10 @@ class QstController extends AbstractController
         if ($authenticationUtils->getLastUsername()) {
             $frm = $formRepository->findOneBy(['id' => 3]);
             // dd($frm->getSection());
-            $srvs = $sectionRepository->findBy(['form' => 3]);
+            $sections = $sectionRepository->findBy(['form' => 3]);
             // dd($srvs);
             for ($i = 0; $i < 1; $i++) {
-                $qsts[$i] = $qstRepository->findBy(['section' => $srvs[$i]->getId()]);
+                $qsts[$i] = $qstRepository->findBy(['section' => $sections[$i]->getId()]);
             }
             // dd(sizeof($qsts[0]));
             if (sizeof($qsts[0]) == 0) {
@@ -142,7 +113,7 @@ class QstController extends AbstractController
             // }
             // dd($qsts);
             $error = $authenticationUtils->getLastAuthenticationError();
-            return $this->render('client/form.html.twig', compact('frm', 'srvs', 'qsts', 'error'));
+            return $this->render('client/form.html.twig', compact('frm', 'sections', 'qsts', 'error'));
         } else {
             return $this->render('qst/valid.html.twig');
         }

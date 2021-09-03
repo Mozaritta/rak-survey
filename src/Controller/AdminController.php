@@ -43,18 +43,26 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="test")
+     * @Route("/valid", name="valid_qst", methods="GET")
      */
-    public function test(AuthenticationUtils $authenticationUtils, Request $request, QuestionsRepository $formRepository, PaginatorInterface $paginatorInterface): Response
-    {
+    public function valid(
+        QuestionsRepository $qstRepository,
+        SectionRepository $sectionRepository,
+        AuthenticationUtils $authenticationUtils,
+        PaginatorInterface $paginatorInterface,
+        Request $request
+        // ,PaginatorInterface $paginator,
+        // Request $request
+    ): Response {
         if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findAll();
+            $sections = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
+            $questions = $qstRepository->findBy([], ['createdAt' => 'DESC']);
             $pagination = $paginatorInterface->paginate(
-                $frm,
+                $questions,
                 $request->query->getInt('page', 1),
-                2
+                4
             );
-            return $this->render('test/test.html.twig', ['frm' => $frm, 'pagination' => $pagination]);
+            return $this->render('qst/index.html.twig', compact('questions', 'sections', 'pagination'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -274,8 +282,8 @@ class AdminController extends AbstractController
     {
         if ($authenticationUtils->getLastUsername()) {
             $qsts = $qstRepository->findBy(['section' => $id], ['createdAt' => 'DESC']);
-            $sec = $sectionRepository->findOneBy(['id' => $id]);
-            return $this->render('section/view.html.twig', compact('qsts', 'sec'));
+            $sections = $sectionRepository->findOneBy(['id' => $id]);
+            return $this->render('section/view.html.twig', compact('qsts', 'sections'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -337,9 +345,9 @@ class AdminController extends AbstractController
     public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $secRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $secs = $secRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
+            $sections = $secRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
             $frm = $formRepository->findOneBy(['id' => $id]);
-            return $this->render('form/view.html.twig', compact('secs', 'frm'));
+            return $this->render('form/view.html.twig', compact('sections', 'frm'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }

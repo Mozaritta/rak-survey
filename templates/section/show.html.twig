@@ -5,7 +5,7 @@
 {% block body %}
 <style> 
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper code { background: #F5F5F5;padding: 2px 6px; }
 </style>
 {% set url = path(app.request.attributes.get('_route')) %}
 <div class="example-wrapper">
@@ -18,11 +18,14 @@
             <div class="card-body">
             <h5 class="card-title text-primary text-center py-3 fs-2">{{section.name}}</h5>
             {% if section.description %}
-                <p class="card-text pb-2">{{section.description}}.                
+                <p class="card-text pb-2">{{section.description}}.
+                {# <p class="text-muted">This sections has <strong>{{section.question.count}}</strong> questions.</p> #}
             {% else %}
                 <p class="card-text pb-2 text-muted">No description addeed for this section for the moment.                
             {% endif %}
                 </p>
+            <figcaption class="blockquote-footer" style="position:absolute;bottom:90px;">Number of questions:{{section.question.count}}</figcaption>
+
             </div>
             <div class="card-footer text-center bg-white ">
             <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">

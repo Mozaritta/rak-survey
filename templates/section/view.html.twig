@@ -10,7 +10,7 @@
   </div>
   <div class="card-body">
     <h5 class="card-title">Questions:</h5>
-    <p class="card-text">This section under the name of <strong> {{srv.name}} </strong> has <strong>{{srv.question.count}}</strong> questions.</p>
+    <p class="card-text">This section under the name of <strong> {{sections.name}} </strong> has <strong>{{sections.question.count}}</strong> questions.</p>
     {% for qst in qsts %}
         <p class="card-text">{{qst.description}} <a href="{{ path('update_qst', {id:qst.id}) }}" class="link-success"> Update</a> <a href="{{ path('delete_from_form', {id:qst.id}) }}" class="link-danger">Delete</a></p>
     {% endfor %}
@@ -18,7 +18,7 @@
     <a type="button" class="btn btn-warning" href="javascript:goBack(); ">Back</a>
   </div>
   <div class="card-footer text-muted">
-    Last updated : {{srv.updatedAt|ago}}
+    Last updated : {{sections.updatedAt|ago}}
   </div>
 </div>
 </div>

@@ -11,10 +11,10 @@
   <div class="card-body">
     <h5 class="card-title">Forms:</h5>
     <p class="card-text">This form under the name of <strong> {{frm.name}} </strong> has <strong>{{frm.section.count}}</strong> sections.</p> 
-    {% for srv in srvs %}
-        <p class="card-text">{{srv.name}}
-        <a href="{{ path('update_form', {id:srv.id}) }}" class="link-success"> Update</a>
-        <a href="{{ path('delete_from_form', {id:srv.id}) }}" class="link-danger">Delete</a>
+    {% for section in sections %}
+        <p class="card-text">{{section.name}}
+        <a href="{{ path('update_form', {id:section.id}) }}" class="link-success"> Update</a>
+        <a href="{{ path('delete_from_form', {id:section.id}) }}" class="link-danger">Delete</a>
         </p>
     {% endfor %}
     <a href="{{ path('show_sections') }}" class="btn btn-primary">Add Sections</a>
