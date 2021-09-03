@@ -1,0 +1,33 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Rak Section!{% endblock %}
+
+{% block body %}
+<style> 
+    .example-wrapper { margin: 9em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    {# <h1 class="text-center">Hello ! ✅</h1>     #}
+
+    
+    <div class="card shadow">
+  <div class="card-header fw-bold text-center">
+    Welcome to Rak Section
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Dear Ms. or Mr Visitor</h5>
+    <p class="card-text mx-5">In here only the admin can create the forms he needs, for clients, coworkers or any specific user.<br>   
+    First he needs to create a new form, add its name and description, taking in mind its content shoulld all be related to the same objective he attends to work on.
+    Second he can chek out the existing sections related to his needs, or simply create a new one using the available questions or new ones from his prepered list.<br>
+    Afterwards this form will be saved and, the concerned visitor will be able to answer it, and he can display the response of each user.<br>
+    Take a look by logging in first if your an admin.
+    If your a client you can log in using your email, and answer the forms that the admin has provided for you, once you finish you can add a note at the end.</p>
+    <div class="text-center">
+    <a href="{{ path('app_login') }}" class="btn btn-primary">Sign in</a>
+  </div>
+  </div>
+</div>
+</div>
+{% endblock %}

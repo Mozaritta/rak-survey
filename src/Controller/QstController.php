@@ -59,10 +59,13 @@ class QstController extends AbstractController
     public function index(AuthenticationUtils $authenticationUtils, QuestionsRepository $qstRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            return $this->redirectToRoute('valid_qst');
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('home');
+            } else if ($this->isGranted('ROLE_USER')) {
+                return $this->render('client/home.html.twig');
+            }
         } else {
-            // dump($authenticationUtils->getLastUsername());
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 

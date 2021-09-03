@@ -1,0 +1,47 @@
+{% extends 'layouts/base.html.twig' %}
+{% block body %}
+<head><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"> </script> </head>
+<style>
+/* external css: flickity.css */
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body { font-family: sans-serif; }
+
+.gallery {
+  background: #EEE;
+}
+
+.gallery-cell {
+  width: 66%;
+  height: 350px !important;
+  margin-right: 10px;
+}
+.text-center{
+  text-align:center
+}
+ 
+ 
+
+</style>
+<h1>hello client</h1>
+<h1 class="text-center">Flickity Responsive Carousel</h1>
+<div class="gallery js-flickity"
+  data-flickity-options='{ "wrapAround": true }'>
+  <div class="gallery-cell">
+<div class="card">hello</div>  </div>
+  <div class="gallery-cell">
+  </div>
+  <div class="gallery-cell">
+  </div>
+  <div class="gallery-cell">
+  </div>
+  <div class="gallery-cell">
+  </div>
+</div>
+
+{% endblock %}

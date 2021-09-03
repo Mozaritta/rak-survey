@@ -26,6 +26,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 class AdminController extends AbstractController
 {
+    /**
+     * @Route("/home", name="home")
+     */
+    public function homeAdmin(): Response
+    {
+        return $this->render('admin/home.html.twig', []);
+    }
+
     ////// QUESTION CRUD /////////////////////////
 
     /**

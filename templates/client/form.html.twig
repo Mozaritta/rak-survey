@@ -3,7 +3,34 @@
 {% block title 'Answer Form!' %}
 
 {% block body %}
-<style> 
+<head><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"> </script> </head>
+<style>
+/* external css: flickity.css */
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body { font-family: sans-serif; }
+
+.gallery {
+  background: #EEE;
+}
+.flickity-prev-next-button{
+    top:90%;
+    right:0px;
+    left:90%;
+}
+.gallery-cell {
+  width: 66%;
+  /*height:auto !important;*/
+  margin-right: 10px;
+}
+.text-center{
+  text-align:center
+}
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
@@ -28,11 +55,13 @@
     {% endif %}
 
     {% if app.user %}
+    <div class="gallery js-flickity border border-primary">
         {% for srv in srvs %}
+        <div class="gallery-cell my-4" style="height:;">
             <div class="col mb-3">
-                <div class="card h-100">
+                <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{srv.name}}</h5>
+                        <h5 class="card-title text-center fw-bold">{{srv.name}}</h5>
                         {% if srv.description %}
                             {# {{x.description}} #}
                             <p class="card-text">{{srv.description}}</p>
@@ -40,7 +69,7 @@
                             <p class="card-text">No descriptin was set for this section</p><br>
                         {% endif %}
                         {% for x in srv.question %}
-                            <br><p class="card-text">{{x.description}}</p>
+                            <br><p class="card-text"><i class="bi bi-check-square"></i>&nbsp{{x.description}}</p>
                             <div class="mx-2">
                                 {% if x.type.name is same as 'CheckBox' %}
                                     <div class="form-check">
@@ -83,15 +112,19 @@
                                         </div>
                                     </div>
                                 {% else %}
-                                    <input type="text" id="text{{x.id}} name="check{{x.id}}"/>
+                                    <input type="text" id="text{{x.id}}" name="check{{x.id}}" />
                                 {% endif %}
                             </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
+        </div>
         {% endfor %}
-        <input class="btn btn-primary" type="submit">
+
+        <input class="btn btn-lg btn-outline-primary shadow-lg p-3 mb-5" style="top:40%;margin-left:50px;font-size:30px" type="submit" value="Submit answers &#128077;">
+        </div>
+
     {% endif %}
     </form>
     </div>

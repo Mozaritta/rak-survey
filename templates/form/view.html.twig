@@ -10,7 +10,7 @@
   </div>
   <div class="card-body">
     <h5 class="card-title">Forms:</h5>
-    <p class="card-text">This section under the name of <strong> {{frm.name}} </strong> has <strong>{{frm.question.count}}</strong> sections.</p> 
+    <p class="card-text">This form under the name of <strong> {{frm.name}} </strong> has <strong>{{frm.section.count}}</strong> sections.</p> 
     {% for srv in srvs %}
         <p class="card-text">{{srv.name}}
         <a href="{{ path('update_form', {id:srv.id}) }}" class="link-success"> Update</a>
@@ -18,11 +18,17 @@
         </p>
     {% endfor %}
     <a href="{{ path('show_sections') }}" class="btn btn-primary">Add Sections</a>
+    <a type="button" class="btn btn-warning" href="javascript:goBack(); "  >Back</a>
+    {# href={{ path('app_home') }} #}
   </div>
   <div class="card-footer text-muted">
     Last updated : {{frm.updatedAt|ago}}
   </div>
 </div>
 </div>
-
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>
 {% endblock %}  

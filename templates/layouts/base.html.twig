@@ -17,8 +17,14 @@
     <body>
 
     	{{include('layouts/partials/_navbar.html.twig')}}
-    <div class="grid-container ">
-    	{{include('layouts/partials/_nav.html.twig')}}
+        
+    <div class="grid-container">
+    {# {% if is_granted('ROLE_USER') %} #}
+        {% if is_granted('ROLE_ADMIN') %}
+    	    {{include('layouts/partials/_nav.html.twig')}}
+            
+        {% endif %}
+    {# {% endif %} #}
         
         <div class="main-content">
         {{include('layouts/partials/_flash_msg.html.twig')}}

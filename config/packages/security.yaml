@@ -37,6 +37,6 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/client, roles: [ROLE_CLIENT, ROLE_ADMIN] }
+    # - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] } # allow admin and client to the answers templates
     # - { path: ^/, roles: ROLE_USER }
-    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } # to prevent error Too many redirect
