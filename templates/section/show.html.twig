@@ -10,6 +10,7 @@
 {% set url = path(app.request.attributes.get('_route')) %}
 <div class="example-wrapper">
     <h1 class="text-center">Show All Sections ✅</h1>
+<a class="btn btn-primary my-4" > Add section <strong>+</strong></a>
 <div class="row row-cols-1 row-cols-md-2 g-2">
 {% for section in pagination.items %}
     <div class="col">

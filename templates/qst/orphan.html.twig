@@ -9,7 +9,7 @@
 </style>
 {% set url = path(app.request.attributes.get('_route')) %}
 <div class="example-wrapper">
-    <h2>List of valid questions</h2>
+    <h2>List of questions without sections</h2>
     <ul>
     {% set a = 2 %}
     {# {{dump(pagination.items)}} #}
@@ -46,7 +46,7 @@
     {% if pagination.items is not same as null %}
         {% if a is same as 0 %}
             <p>All available question has there own sections</p>
-            <a href="{{ path('valid_qst') }}" class="btn btn-primary">Add questions</a>
+            <a href="{{ path('add_qst') }}" class="btn btn-primary">Add questions</a>
             <a type="button" class="btn btn-warning" href="javascript:goBack(); ">Back</a>
             {# {% endif %} #}
         {% endif %}

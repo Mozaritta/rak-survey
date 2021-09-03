@@ -43,7 +43,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/orphan", name="orphan_qst")
+     * @Route("/orphan_qst", name="orphan_qst")
      */
     public function orphanQst(QuestionsRepository $qstRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
@@ -196,6 +196,7 @@ class AdminController extends AbstractController
             return $this->render('anonymous/first.html.twig');
         }
     }
+
 
     /**
      * @Route("/update/{id<[0-9]+>}", name="update_section"))
