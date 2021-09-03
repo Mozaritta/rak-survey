@@ -9,10 +9,10 @@
 </style>
 
 <div class="example-wrapper">
+{{dump(app.user)}}
 {% if is_granted('ROLE_ADMIN') %}
     <h1>Add new question ✅</h1>    
     {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Add'})}}
-    <a href="...">Delete</a>
 {% elseif is_granted('ROLE_USER') %}
     <h1>Add a new complaint ✅</h1>    
     {{ include('/layouts/partials/_form.html.twig', {submitBtn : 'Send'})}}

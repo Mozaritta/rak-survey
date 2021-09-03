@@ -14,7 +14,7 @@ use App\Repository\FormRepository;
 use App\Repository\SectionRepository;
 use App\Repository\QuestionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-// use Symfony\Component\BrowserKit\Request;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,11 +29,36 @@ class AdminController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function homeAdmin(): Response
+    public function homeAdmin(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('admin/home.html.twig', []);
+        if ($authenticationUtils->getLastUsername()) {
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->render('admin/home.html.twig', []);
+            } else {
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
     }
 
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test(AuthenticationUtils $authenticationUtils, Request $request, QuestionsRepository $formRepository, PaginatorInterface $paginatorInterface): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $frm = $formRepository->findAll();
+            $pagination = $paginatorInterface->paginate(
+                $frm,
+                $request->query->getInt('page', 1),
+                2
+            );
+            return $this->render('test/test.html.twig', ['frm' => $frm, 'pagination' => $pagination]);
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
     ////// QUESTION CRUD /////////////////////////
 
     /**
@@ -63,7 +88,7 @@ class AdminController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -84,7 +109,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('app_home');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -105,7 +130,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('app_check');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -118,7 +143,7 @@ class AdminController extends AbstractController
             $qsts = $qstRepository->findBy([], ['createdAt' => 'DESC']);
             return $this->render('qst/check.html.twig', compact('qsts'));
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -147,7 +172,7 @@ class AdminController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -174,7 +199,7 @@ class AdminController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -195,7 +220,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('app_home');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -217,7 +242,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('show_sections');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -237,9 +262,36 @@ class AdminController extends AbstractController
                 'primary',
                 $message
             );
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('show_sections');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+    /**
+     * @Route("/view/{id<[0-9]+>}", name="view_section")
+     */
+    public function viewSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $qsts = $qstRepository->findBy(['section' => $id], ['createdAt' => 'DESC']);
+            $srv = $sectionRepository->findOneBy(['id' => $id]);
+            return $this->render('section/view.html.twig', compact('qsts', 'srv'));
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/section", name="show_sections")
+     */
+    public function showSections(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, FormRepository $formRepository): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $srv = $srvRepository->findBy([], ['createdAt' => 'DESC']);
+            $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
+            return $this->render('section/show.html.twig', compact('srv', 'frm'));
+        } else {
+            return $this->render('anonymous/first.html.twig');
         }
     }
     ////// END SECTION CRUD /////////////////////////
@@ -270,7 +322,34 @@ class AdminController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/form/view/{id<[0-9]+>}", name="view_form")
+     */
+    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $srvRepository): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $srvs = $srvRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
+            $frm = $formRepository->findOneBy(['id' => $id]);
+            return $this->render('form/view.html.twig', compact('srvs', 'frm'));
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/forms", name="show_forms")
+     */
+    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
+            return $this->render('form/show.html.twig', compact('frm'));
+        } else {
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -297,7 +376,7 @@ class AdminController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -318,7 +397,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('app_home');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -340,7 +419,7 @@ class AdminController extends AbstractController
             // }
             return $this->redirectToRoute('show_forms');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -363,7 +442,7 @@ class AdminController extends AbstractController
             );
             return $this->redirectToRoute('show_sections');
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
     ////// END FORM CRUD /////////////////////////

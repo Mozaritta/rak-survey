@@ -47,7 +47,7 @@ class QstController extends AbstractController
 
         } else {
             // dump($authenticationUtils->getLastUsername());
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
     ////// START QST CRUD /////////////////////////
@@ -76,23 +76,23 @@ class QstController extends AbstractController
     {
         if ($authenticationUtils->getLastUsername()) {
             $question = new Questions;
-            if ($this->isGranted('ROLE_USER')) {
-                $type = $typeRepository->findOneBy(['name' => "TextField"]);
-                $question->setType($type);
-                $question->setValid(false);
-                $question->setUser($this->getUser());
-                $form = $this->createFormBuilder($question)
-                    ->add('description', TextareaType::class)
-                    ->add('valid', CheckboxType::class, ['value' => false, 'disabled' => true])
-                    ->getForm();
-                $form->handleRequest(($request));
-            } else if ($this->isGranted('ROLE_ADMIN')) {
+            // if ($this->isGranted('ROLE_USER')) {
+            //     $type = $typeRepository->findOneBy(['name' => "TextField"]);
+            //     $question->setType($type);
+            //     $question->setValid(false);
+            //     $question->setUser($this->getUser());
+            //     $form = $this->createFormBuilder($question)
+            //         ->add('description', TextareaType::class)
+            //         ->add('valid', CheckboxType::class, ['value' => false, 'disabled' => true])
+            //         ->getForm();
+            //     $form->handleRequest(($request));
+            // } else
+            if ($this->isGranted('ROLE_ADMIN')) {
                 $form = $this->createForm(QuestionsType::class, $question);
                 $form->handleRequest($request);
             }
-
-
             if ($form->isSubmitted() && $form->isValid()) {
+                $question->setUser($this->getUser());
                 $em->persist($question);
                 $em->flush();
                 $this->addFlash(
@@ -105,72 +105,15 @@ class QstController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
 
     ////// END QST CRUD /////////////////////////
-    ////// SECTION CRUD /////////////////////////
-
-    /**
-     * @Route("/view/{id<[0-9]+>}", name="view_section")
-     */
-    public function viewSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
-    {
-        if ($authenticationUtils->getLastUsername()) {
-            $qsts = $qstRepository->findBy(['section' => $id], ['createdAt' => 'DESC']);
-            $srv = $sectionRepository->findOneBy(['id' => $id]);
-            return $this->render('section/view.html.twig', compact('qsts', 'srv'));
-        } else {
-            return $this->render('qst/valid.html.twig');
-        }
-    }
-
-    /**
-     * @Route("/section", name="show_sections")
-     */
-    public function showSections(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, FormRepository $formRepository): Response
-    {
-        if ($authenticationUtils->getLastUsername()) {
-            $srv = $srvRepository->findBy([], ['createdAt' => 'DESC']);
-            $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
-            return $this->render('section/show.html.twig', compact('srv', 'frm'));
-        } else {
-            return $this->render('qst/valid.html.twig');
-        }
-    }
-
-
-    ////// END SECTION CRUD /////////////////////////
     ////// FORM CRUD /////////////////////////
 
-    /**
-     * @Route("/form/view/{id<[0-9]+>}", name="view_form")
-     */
-    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $srvRepository): Response
-    {
-        if ($authenticationUtils->getLastUsername()) {
-            $srvs = $srvRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
-            $frm = $formRepository->findOneBy(['id' => $id]);
-            return $this->render('form/view.html.twig', compact('srvs', 'frm'));
-        } else {
-            return $this->render('qst/valid.html.twig');
-        }
-    }
 
-    /**
-     * @Route("/forms", name="show_forms")
-     */
-    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository): Response
-    {
-        if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
-            return $this->render('form/show.html.twig', compact('frm'));
-        } else {
-            return $this->render('qst/valid.html.twig');
-        }
-    }
 
 
     ////// END FORM CRUD /////////////////////////
