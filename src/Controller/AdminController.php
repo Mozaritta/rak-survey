@@ -43,6 +43,19 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/orphan", name="orphan_qst")
+     */
+    public function orphanQst(QuestionsRepository $qstRepository, PaginatorInterface $paginatorInterface, Request $request): Response
+    {
+        $orphan = $qstRepository->findBy(['section' => null], ['createdAt' => 'DESC']);
+        $pagination = $paginatorInterface->paginate(
+            $orphan,
+            $request->query->getInt('page', 1),
+            4
+        );
+        return $this->render('qst/orphan.html.twig', compact('orphan', 'pagination'));
+    }
+    /**
      * @Route("/valid", name="valid_qst", methods="GET")
      */
     public function valid(
