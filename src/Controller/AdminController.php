@@ -348,11 +348,16 @@ class AdminController extends AbstractController
     /**
      * @Route("/forms", name="show_forms")
      */
-    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, PaginatorInterface $paginatorInterface): Response
+    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
-            return $this->render('form/show.html.twig', compact('frm'));
+            $pagination = $paginatorInterface->paginate(
+                $frm,
+                $request->query->getInt('page', 1),
+                1
+            );
+            return $this->render('form/show.html.twig', compact('frm', 'pagination'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }

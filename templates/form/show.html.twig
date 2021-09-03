@@ -7,11 +7,12 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
+{% set url = path(app.request.attributes.get('_route')) %}
 
 <div class="example-wrapper">
     <h1 class="text-center">Show All Forms ✅</h1>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-{% for form in frm %}
+{% for form in pagination.items %}
     <div class="col">
         <div class="card h-100 border-primary mb-3 shadow">
             {# <img src="asset('/assets/images/images.png')" class="card-img-top" alt="..."> #}
@@ -39,6 +40,36 @@
     </div>
 {% endfor %}
 </div>
+<nav aria-label="Page navigation example">
+<ul class="pagination justify-content-center my-5">
+    {% if pagination.currentPageNumber is same as 1 %}
+ <li class="page-item disabled">   
+    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+</li>
+    {% else %}
+    <li class="page-item">
+    <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber - 1}}">Previous</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber - 1}}">{{pagination.currentPageNumber - 1}}</a>
+    </li>
+    {% endif %}
+    
+    <li class="page-item active">
+        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber}}">{{pagination.currentPageNumber }}</a>
+    </li>
+    {% if pagination.currentPageNumber is same as pagination.pageCount %}
+    <li class="page-item disabled">
+        <a class="page-link" class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber + 1}}">{{pagination.currentPageNumber + 1}}</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="{{url}}?page={{pagination.currentPageNumber + 1}}">Next</a></li>
+    {% endif %}
+    </ul>
+</nav>
 {# {{include('layouts/partials/_pagination.html.twig')}} #}
 </div>
 {% endblock %}
