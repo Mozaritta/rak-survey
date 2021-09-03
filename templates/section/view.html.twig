@@ -15,13 +15,18 @@
         <p class="card-text">{{qst.description}} <a href="{{ path('update_qst', {id:qst.id}) }}" class="link-success"> Update</a> <a href="{{ path('delete_from_form', {id:qst.id}) }}" class="link-danger">Delete</a></p>
     {% endfor %}
     <a href="{{ path('app_home') }}" class="btn btn-primary">Add questions</a>
+    <a type="button" class="btn btn-warning" href="javascript:goBack(); ">Back</a>
   </div>
   <div class="card-footer text-muted">
     Last updated : {{srv.updatedAt|ago}}
   </div>
 </div>
 </div>
-
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>
     {# <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

@@ -9,13 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello ! ✅</h1>
-    This is the list of valid questions
+    <h2>List of valid questions</h2>
     <ul>
     {% for qst in qsts %}
         {% if qst.valid %}
             <div style="display:flex; flex-wrap:wrap;font-weight:bold; font-size:20px">
-            <li style="list-style: none;width:400px"><input class="form-control bg-white my-2"   value="{{ qst.description }}" disabled/>
+            <li style="list-style: none;width:400px;"><textarea class="form-control bg-white my-2 shadow" disabled>{{ qst.description }}</textarea></li>
             </li>
         </div>
         
