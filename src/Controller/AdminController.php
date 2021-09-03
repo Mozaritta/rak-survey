@@ -179,11 +179,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/update/{id<[0-9]+>}", name="update_section"))
      */
-    public function updateSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, SectionRepository $srvRepository, EntityManagerInterface $em): Response
+    public function updateSection(AuthenticationUtils $authenticationUtils, Request $request, int $id, SectionRepository $secRepository, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srv = $srvRepository->findOneBy(['id' => $id]);
-            $form = $this->createForm(SectionType::class, $srv);
+            $sec = $secRepository->findOneBy(['id' => $id]);
+            $form = $this->createForm(SectionType::class, $sec);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -195,7 +195,7 @@ class AdminController extends AbstractController
                 return $this->redirectToRoute('show_sections');
             }
             return $this->render('section/update.html.twig', [
-                'srv' => $srv,
+                'sec' => $sec,
                 'form' => $form->createView()
             ]);
         } else {
@@ -206,11 +206,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/delete/{id<[0-9]+>}", name="delete_section")
      */
-    public function deleteSection(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, int $id, EntityManagerInterface $em): Response
+    public function deleteSection(AuthenticationUtils $authenticationUtils, SectionRepository $secRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srv = $srvRepository->findOneBy(['id' => $id]);
-            $em->remove($srv);
+            $sec = $secRepository->findOneBy(['id' => $id]);
+            $em->remove($sec);
             $em->flush();
             $message = 'Section deleted successfully';
             $this->addFlash(
@@ -231,8 +231,8 @@ class AdminController extends AbstractController
     {
         if ($authenticationUtils->getLastUsername()) {
             $qst = $qstRepository->findOneBy(['id' => $id]);
-            $srv = $sectionRepository->findOneBy(['id' => $qst->getSection()]);
-            $srv->removeQuestion($qst);
+            $sec = $sectionRepository->findOneBy(['id' => $qst->getSection()]);
+            $sec->removeQuestion($qst);
             $em->flush();
             $message = 'Question deleted from section successfully';
             $this->addFlash(
@@ -254,8 +254,8 @@ class AdminController extends AbstractController
         if ($authenticationUtils->getLastUsername()) {
             // dd($idd, $id);
             $qst = $qstRepository->findOneBy(['id' => $id]);
-            $srv = $sectionRepository->findOneBy(['id' => $idd]);
-            $srv->addQuestion($qst);
+            $sec = $sectionRepository->findOneBy(['id' => $idd]);
+            $sec->addQuestion($qst);
             $em->flush();
             $message = 'Question added to section successfully';
             $this->addFlash(
@@ -274,8 +274,8 @@ class AdminController extends AbstractController
     {
         if ($authenticationUtils->getLastUsername()) {
             $qsts = $qstRepository->findBy(['section' => $id], ['createdAt' => 'DESC']);
-            $srv = $sectionRepository->findOneBy(['id' => $id]);
-            return $this->render('section/view.html.twig', compact('qsts', 'srv'));
+            $sec = $sectionRepository->findOneBy(['id' => $id]);
+            return $this->render('section/view.html.twig', compact('qsts', 'sec'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -284,12 +284,17 @@ class AdminController extends AbstractController
     /**
      * @Route("/section", name="show_sections")
      */
-    public function showSections(AuthenticationUtils $authenticationUtils, SectionRepository $srvRepository, FormRepository $formRepository): Response
+    public function showSections(AuthenticationUtils $authenticationUtils, SectionRepository $sectionRepository, FormRepository $formRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srv = $srvRepository->findBy([], ['createdAt' => 'DESC']);
+            $sec = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
             $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
-            return $this->render('section/show.html.twig', compact('srv', 'frm'));
+            $pagination = $paginatorInterface->paginate(
+                $sec,
+                $request->query->getInt('page', 1),
+                4
+            );
+            return $this->render('section/show.html.twig', compact('sec', 'frm', 'pagination'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -329,12 +334,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/form/view/{id<[0-9]+>}", name="view_form")
      */
-    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $srvRepository): Response
+    public function viewForm(AuthenticationUtils $authenticationUtils, Request $request, int $id, FormRepository $formRepository, SectionRepository $secRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srvs = $srvRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
+            $secs = $secRepository->findBy(['form' => $id], ['createdAt' => 'DESC']);
             $frm = $formRepository->findOneBy(['id' => $id]);
-            return $this->render('form/view.html.twig', compact('srvs', 'frm'));
+            return $this->render('form/view.html.twig', compact('secs', 'frm'));
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -343,7 +348,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/forms", name="show_forms")
      */
-    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository): Response
+    public function showForms(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, PaginatorInterface $paginatorInterface): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $frm = $formRepository->findBy([], ['createdAt' => 'DESC']);
@@ -407,9 +412,9 @@ class AdminController extends AbstractController
     public function deleteFromForm(AuthenticationUtils $authenticationUtils, SectionRepository $sectionRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $srv = $sectionRepository->findOneBy(['id' => $id]);
-            $frm = $formRepository->findOneBy(['id' => $srv->getForm()]);
-            $frm->removeSection($srv);
+            $sec = $sectionRepository->findOneBy(['id' => $id]);
+            $frm = $formRepository->findOneBy(['id' => $sec->getForm()]);
+            $frm->removeSection($sec);
             $em->flush();
             $message = 'Section deleted from form successfully';
             $this->addFlash(
@@ -424,16 +429,16 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/form/insert/{idd<[0-9]+>}/{id<[0-9]+>}", name="insert_srv")
+     * @Route("/form/insert/{idd<[0-9]+>}/{id<[0-9]+>}", name="insert_sec")
      */
     public function insertIntoForm(AuthenticationUtils $authenticationUtils, int $idd, SectionRepository $sectionRepository, FormRepository $formRepository, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             // dd($idd, $id);
-            $srv = $sectionRepository->findOneBy(['id' => $id]);
+            $sec = $sectionRepository->findOneBy(['id' => $id]);
             $frm = $formRepository->findOneBy(['id' => $idd]);
             // dd($id);
-            $frm->addSection($srv);
+            $frm->addSection($sec);
             $em->flush();
             $message = 'Section added to form successfully';
             $this->addFlash(
