@@ -13,6 +13,8 @@ use App\Repository\TypeRepository;
 use App\Repository\FormRepository;
 use App\Repository\SectionRepository;
 use App\Repository\QuestionsRepository;
+use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +58,48 @@ class AdminController extends AbstractController
         return $this->render('qst/orphan.html.twig', compact('orphan', 'pagination'));
     }
     /**
+     * @Route("/list", name="list_client")
+     */
+    public function listClient(UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
+    {
+        $user = $userRepository->findBy([], ['createdAt' => 'DESC']);
+        $role = $roleRepository->findBy(['name' => 'Client']);
+        $r = ($role[0]->getId());
+        $j = 1;
+        $client = [];
+        // dd($user);
+        for ($i = 0; $i < sizeof($user) + 1; $i++) {
+            // dd($user[0]->getRole());
+            if ($user[$i]->getRole()[0] == null) {
+                $id = $user[$i]->getId();
+                /////////
+                $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                if (!$connection) {
+                    die("Connection failed: " . mysqli_connect_error());
+                }
+                $query = "INSERT INTO user_role (user_id, role_id) VALUES ('$id', '$r')"; // affecter à n'importe quel user sans role le role ROLE_USER
+                if (mysqli_query($connection, $query)) {
+                    echo "Added yes";
+                } else {
+                    echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                }
+
+                mysqli_close($connection);
+                $client[$j] = $user[$i];
+                dd($client);
+                $j++;
+            } else if ($user[$i]->getRoles()[0] == 'ROLE_USER') {
+                $client[$j] = $user[$i];
+                // dd($client);
+                $j++;
+            } else {
+                continue;
+            }
+        }
+        dd($client);
+        return $this->render('admin/list.html.twig', compact('client'));
+    }
+    /**
      * @Route("/valid", name="valid_qst", methods="GET")
      */
     public function valid(
@@ -64,8 +108,6 @@ class AdminController extends AbstractController
         AuthenticationUtils $authenticationUtils,
         PaginatorInterface $paginatorInterface,
         Request $request
-        // ,PaginatorInterface $paginator,
-        // Request $request
     ): Response {
         if ($authenticationUtils->getLastUsername()) {
             $sections = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
