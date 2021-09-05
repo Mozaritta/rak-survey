@@ -62,7 +62,7 @@ class AdminController extends AbstractController
      */
     public function listClient(UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
-        $user = $userRepository->findBy([], ['createdAt' => 'DESC']);
+        $user = $userRepository->findBy([], ['id' => 'ASC']);
         $role = $roleRepository->findBy(['name' => 'Client']);
         $r = ($role[0]->getId());
         $j = 1;

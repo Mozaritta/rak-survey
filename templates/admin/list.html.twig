@@ -9,19 +9,24 @@
 </style>
 <div class="container" style="margin: auto 0">
 <table class="table table-bordered border-primary text-center" style="max-width:700px; margin:100px auto">
-<tr class="bg-primary text-white">
+{# <tr class="bg-primary text-white"> #}
+<tr>
+<th>ID</h>
 <th>First Name </th>
 <th>Last Name </th>
 <th>Email </th>
 <th>Role </th>
+<th>Set Admin </th>
 {# {{ dump(clients) }} #}
 </tr>
 {% for client in pagination %}
 <tr>
+    <td>{{ client.id}}</td>
     <td>{{ client.firstName}}</td>
     <td>{{ client.lastName}}</td>
     <td>{{ client.email}}</td>
     <td>{{ client.roles[0]}}</td>
+    <td><a href="" class="btn btn-primary">Set admin</a></td>
 </tr>
 {% endfor %}
 </table>
