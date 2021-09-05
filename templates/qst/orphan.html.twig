@@ -52,37 +52,7 @@
         {% endif %}
     {% endif %}
     </ul>
-    <nav aria-label="Page navigation example">
-<ul class="pagination justify-content-center my-5">
-    {% if pagination.currentPageNumber is same as 1 %}
- <li class="page-item disabled">   
-    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-</li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber - 1}}">Previous</a>
-    </li>
-    <li class="page-item">
-        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber - 1}}">{{pagination.currentPageNumber - 1}}</a>
-    </li>
-    {% endif %}
-    
-    <li class="page-item active">
-        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber}}">{{pagination.currentPageNumber }}</a>
-    </li>
-    {% if pagination.currentPageNumber is same as pagination.pageCount %}
-    <li class="page-item disabled">
-        <a class="page-link" class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="{{url}}?page={{pagination.currentPageNumber + 1}}">{{pagination.currentPageNumber + 1}}</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="{{url}}?page={{pagination.currentPageNumber + 1}}">Next</a></li>
-    {% endif %}
-    </ul>
-</nav>
-    {# {{include('layouts/partials/_pagination.html.twig')}} #}
+    {{include('layouts/partials/_pagination.html.twig')}}
 </div>
 <script>var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {

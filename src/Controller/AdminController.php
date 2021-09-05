@@ -66,10 +66,10 @@ class AdminController extends AbstractController
         $role = $roleRepository->findBy(['name' => 'Client']);
         $r = ($role[0]->getId());
         $j = 1;
-        $client = [];
+        $clients = [];
         // dd($user);
-        for ($i = 0; $i < sizeof($user) + 1; $i++) {
-            // dd($user[0]->getRole());
+        for ($i = 0; $i < sizeof($user); $i++) {
+            $roles[$i] = ($user[0]->getRole());
             if ($user[$i]->getRole()[0] == null) {
                 $id = $user[$i]->getId();
                 /////////
@@ -85,19 +85,24 @@ class AdminController extends AbstractController
                 }
 
                 mysqli_close($connection);
-                $client[$j] = $user[$i];
-                dd($client);
+                $clients[$j] = $user[$i];
+                // dd($clients);
                 $j++;
             } else if ($user[$i]->getRoles()[0] == 'ROLE_USER') {
-                $client[$j] = $user[$i];
-                // dd($client);
+                $clients[$j] = $user[$i];
+                // dd($clients);
                 $j++;
             } else {
                 continue;
             }
+            $pagination = $paginatorInterface->paginate(
+                $clients,
+                $request->query->getInt('page', 1),
+                10
+            );
         }
-        dd($client);
-        return $this->render('admin/list.html.twig', compact('client'));
+        // dd($clients);
+        return $this->render('admin/list.html.twig', compact('pagination'));
     }
     /**
      * @Route("/valid", name="valid_qst", methods="GET")
