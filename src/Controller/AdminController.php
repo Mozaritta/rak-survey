@@ -47,63 +47,118 @@ class AdminController extends AbstractController
     /**
      * @Route("/orphan_qst", name="orphan_qst")
      */
-    public function orphanQst(QuestionsRepository $qstRepository, PaginatorInterface $paginatorInterface, Request $request): Response
+    public function orphanQst(AuthenticationUtils $authenticationUtils, QuestionsRepository $qstRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
-        $orphan = $qstRepository->findBy(['section' => null], ['createdAt' => 'DESC']);
-        $pagination = $paginatorInterface->paginate(
-            $orphan,
-            $request->query->getInt('page', 1),
-            4
-        );
-        return $this->render('qst/orphan.html.twig', compact('orphan', 'pagination'));
+        if ($authenticationUtils->getLastUsername()) {
+            if ($this->isGranted('ROLE_ADMIN')) {
+
+                $orphan = $qstRepository->findBy(['section' => null], ['createdAt' => 'DESC']);
+                $pagination = $paginatorInterface->paginate(
+                    $orphan,
+                    $request->query->getInt('page', 1),
+                    4
+                );
+                return $this->render('qst/orphan.html.twig', compact('orphan', 'pagination'));
+            } else if ($this->isGranted('ROLE_USER')) {
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
     }
     /**
      * @Route("/list", name="list_client")
      */
-    public function listClient(UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
+    public function listClient(AuthenticationUtils $authenticationUtils, UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
-        $user = $userRepository->findBy([], ['id' => 'ASC']);
-        $role = $roleRepository->findBy(['name' => 'Client']);
-        $r = ($role[0]->getId());
-        $j = 1;
-        $clients = [];
-        // dd($user);
-        for ($i = 0; $i < sizeof($user); $i++) {
-            $roles[$i] = ($user[0]->getRole());
-            if ($user[$i]->getRole()[0] == null) {
-                $id = $user[$i]->getId();
-                /////////
+        if ($authenticationUtils->getLastUsername()) {
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $user = $userRepository->findBy([], ['id' => 'ASC']);
+                $role = $roleRepository->findBy(['name' => 'Client']);
+                $r = ($role[0]->getId());
+                $j = 1;
+                $clients = [];
+                // dd($user);
+                for ($i = 0; $i < sizeof($user); $i++) {
+                    $roles[$i] = ($user[0]->getRole());
+                    if ($user[$i]->getRole()[0] == null) {
+                        $id = $user[$i]->getId();
+                        /////////
+                        $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                        if (!$connection) {
+                            die("Connection failed: " . mysqli_connect_error());
+                        }
+                        $query = "INSERT INTO user_role (user_id, role_id) VALUES ('$id', '$r')"; // affecter à n'importe quel user sans role le role ROLE_USER
+                        if (mysqli_query($connection, $query)) {
+                            echo "Added yes";
+                        } else {
+                            echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                        }
+
+                        mysqli_close($connection);
+                        $clients[$j] = $user[$i];
+                        // dd($clients);
+                        $j++;
+                    } else if ($user[$i]->getRoles()[0] == 'ROLE_USER') {
+                        $clients[$j] = $user[$i];
+                        // dd($clients);
+                        $j++;
+                    } else {
+                        continue;
+                    }
+                    $pagination = $paginatorInterface->paginate(
+                        $clients,
+                        $request->query->getInt('page', 1),
+                        10
+                    );
+                }
+                // dd($clients);
+                return $this->render('admin/list.html.twig', compact('pagination'));
+            } else {
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+    /// from user to admin
+    /**
+     * @Route("/change/{id<[0-9]+>}", name="set_admin")
+     */
+    public function setAsAdmin(int $id, AuthenticationUtils $authenticationUtils, RoleRepository $roleRepository): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $role = $roleRepository->findBy(['name' => 'Admin']);
+                $r = ($role[0]->getId());
                 $connection = mysqli_connect("localhost", "root", "", "raksurvey");
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
-                $query = "INSERT INTO user_role (user_id, role_id) VALUES ('$id', '$r')"; // affecter à n'importe quel user sans role le role ROLE_USER
+                // dd($r);
+                $query = "UPDATE user_role SET role_id = $r WHERE user_id = $id"; // affecter à n'importe quel user sans role le role ROLE_USER
                 if (mysqli_query($connection, $query)) {
-                    echo "Added yes";
+                    $this->addFlash(
+                        'success',
+                        'User set to admin successfully'
+                    );
                 } else {
-                    echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                    $this->addFlash(
+                        'danger',
+                        mysqli_error($connection)
+                    );
                 }
-
                 mysqli_close($connection);
-                $clients[$j] = $user[$i];
-                // dd($clients);
-                $j++;
-            } else if ($user[$i]->getRoles()[0] == 'ROLE_USER') {
-                $clients[$j] = $user[$i];
-                // dd($clients);
-                $j++;
+                return $this->redirectToRoute('list_client');
             } else {
-                continue;
+                return $this->redirectToRoute('app_home');
             }
-            $pagination = $paginatorInterface->paginate(
-                $clients,
-                $request->query->getInt('page', 1),
-                10
-            );
+        } else {
+            return $this->render('anonymous/first.html.twig');
         }
-        // dd($clients);
-        return $this->render('admin/list.html.twig', compact('pagination'));
     }
+
+    //// end ////
     /**
      * @Route("/valid", name="valid_qst", methods="GET")
      */
@@ -115,14 +170,18 @@ class AdminController extends AbstractController
         Request $request
     ): Response {
         if ($authenticationUtils->getLastUsername()) {
-            $sections = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
-            $questions = $qstRepository->findBy([], ['createdAt' => 'DESC']);
-            $pagination = $paginatorInterface->paginate(
-                $questions,
-                $request->query->getInt('page', 1),
-                4
-            );
-            return $this->render('qst/index.html.twig', compact('questions', 'sections', 'pagination'));
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $sections = $sectionRepository->findBy([], ['createdAt' => 'DESC']);
+                $questions = $qstRepository->findBy([], ['createdAt' => 'DESC']);
+                $pagination = $paginatorInterface->paginate(
+                    $questions,
+                    $request->query->getInt('page', 1),
+                    4
+                );
+                return $this->render('qst/index.html.twig', compact('questions', 'sections', 'pagination'));
+            } else {
+                return $this->redirectToRoute('app_home');
+            }
         } else {
             return $this->render('anonymous/first.html.twig');
         }

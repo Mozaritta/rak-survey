@@ -26,7 +26,7 @@
     <td>{{ client.lastName}}</td>
     <td>{{ client.email}}</td>
     <td>{{ client.roles[0]}}</td>
-    <td><a href="" class="btn btn-primary">Set admin</a></td>
+    <td><a href="{{ path('set_admin', {id:client.id}) }}" class="btn btn-primary">Set admin</a></td>
 </tr>
 {% endfor %}
 </table>
