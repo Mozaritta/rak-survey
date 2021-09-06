@@ -17,31 +17,71 @@ body { font-family: sans-serif; }
 }
 </style>
 </head>
-
-<h1>Hello client</h1>
+<div class="container my-5">
+<h1>Welcome to the main page of our agency</h1>
+{# {% if condition %}
+  
+{% else %}
+  
+{% endif %} #}
 <div class="container">
 <h2 class="text-center">Actualite</h2>
-<div class="gallery js-flickity"
+<div class="gallery js-flickity border border-primary"
   data-flickity-options='{ "wrapAround": true }'>
-  <div class="gallery-cell " style="text-align:center;">
+  <div class="gallery-cell">
     <div class="card px-4 py-4">
-      <h4>981,26 Millions de DH d’investissements pour la période 2019-2023</h4>
-      <img src="{{ asset('images/actu.jpg') }}" width="300" height="200" class="shadow rounded my-2" />
-      <p> hello </p>
+      <h4 class="text-center">981,26 Millions de DH d’investissements pour la période 2019-2023</h4>
+      <div class="row">
+        <div class="col col-lg-5">
+          <img src="{{ asset('images/actu.jpg') }}" height="200" width="300"class="shadow rounded my-2 " style="" />
+        </div>
+        <div class="col py-2 px-4">
+          <aside style="text-align:justify"> Le Conseil d’Administration de la Régie Autonome Intercommunale de Distribution d’Eau, d’Electricité et d’Assainissement liquide de la Province de Kénitra s’est réuni en date du 19 Juin 2019 à 10 heures au siège de la RAK. Cette réunion a été présidée par Monsieur Fouad Mhamdi, Gouverneur de la Province de Kénitra, en présence des représentants du Ministère de l’Intérieur et de l’économie et finance, des élus locaux, des représentants des Administrations et de Monsieur Mustapha ZAHRI, Directeur Général par intérim de la RAK.</aside>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="gallery-cell">
+    <div class="card px-4 py-4">
+      <h4>La RAK remporte le prix d’excellence « Emtiaz »</h4>
+    <div class="row">
+      <div class="col col-lg-5">
+        <img src="{{ asset('images/actu.jpg') }}" height="200" width="300"class="shadow rounded my-2 " style="" />
+      </div>
+      <div class="col py-2 px-4">
+        <aside style="text-align:justify"> Le Conseil d’Administration de la Régie Autonome Intercommunale de Distribution d’Eau, d’Electricité et d’Assainissement liquide de la Province de Kénitra s’est réuni en date du 19 Juin 2019 à 10 heures au siège de la RAK. Cette réunion a été présidée par Monsieur Fouad Mhamdi, Gouverneur de la Province de Kénitra, en présence des représentants du Ministère de l’Intérieur et de l’économie et finance, des élus locaux, des représentants des Administrations et de Monsieur Mustapha ZAHRI, Directeur Général par intérim de la RAK.</aside>
+      </div>
+    </div>
     </div>
   </div>
   <div class="gallery-cell">
-    <h3>La RAK remporte le prix d’excellence « Emtiaz »</h3>
+  <div class="card px-4 py-4">
+    <h4>Traitement de réclamation</h4>
+    <div class="row">
+      <div class="col col-lg-5">
+        <img src="{{ asset('images/actu.jpg') }}" height="200" width="300"class="shadow rounded my-2 " style="" />
+      </div>
+      <div class="col py-2 px-4">
+        <aside style="text-align:justify"> Le Conseil d’Administration de la Régie Autonome Intercommunale de Distribution d’Eau, d’Electricité et d’Assainissement liquide de la Province de Kénitra s’est réuni en date du 19 Juin 2019 à 10 heures au siège de la RAK. Cette réunion a été présidée par Monsieur Fouad Mhamdi, Gouverneur de la Province de Kénitra, en présence des représentants du Ministère de l’Intérieur et de l’économie et finance, des élus locaux, des représentants des Administrations et de Monsieur Mustapha ZAHRI, Directeur Général par intérim de la RAK.</aside>
+      </div>
+    </div>
+    </div>
   </div>
   <div class="gallery-cell">
-    <h3>Traitement de réclamation</h3>
-  </div>
-  <div class="gallery-cell">
-    <h3>1 Milliard et 318,43 Millions de DH d’investissements pour la période 2020-2024 Dont 303,23 Millions de DH au titre de l’année 2020</h3>
-  </div>
-  <div class="gallery-cell">
+  <div class="card px-4 py-4">
+    <h4>1 Milliard et 318,43 Millions de DH d’investissements pour la période 2020-2024 Dont 303,23 Millions de DH au titre de l’année 2020</h4>
+    <div class="row">
+      <div class="col col-lg-5">
+        <img src="{{ asset('images/actu.jpg') }}" height="200" width="300"class="shadow rounded my-2 " style="" />
+      </div>
+      <div class="col py-2 px-4">
+        <aside style="text-align:justify"> Le Conseil d’Administration de la Régie Autonome Intercommunale de Distribution d’Eau, d’Electricité et d’Assainissement liquide de la Province de Kénitra s’est réuni en date du 19 Juin 2019 à 10 heures au siège de la RAK. Cette réunion a été présidée par Monsieur Fouad Mhamdi, Gouverneur de la Province de Kénitra, en présence des représentants du Ministère de l’Intérieur et de l’économie et finance, des élus locaux, des représentants des Administrations et de Monsieur Mustapha ZAHRI, Directeur Général par intérim de la RAK.</aside>
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 </div>
+
 
 {% endblock %}

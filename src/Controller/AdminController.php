@@ -31,11 +31,44 @@ class AdminController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function homeAdmin(AuthenticationUtils $authenticationUtils): Response
+    public function homeAdmin(AuthenticationUtils $authenticationUtils, UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->render('admin/home.html.twig', []);
+                $users = $userRepository->findBy([], ['id' => 'ASC']);
+                $role = $roleRepository->findBy(['name' => 'Client']);
+                $r = ($role[0]->getId());
+                $j = 1;
+                // dd($user);
+                for ($i = 0; $i < sizeof($users); $i++) {
+                    $roles[$i] = ($users[0]->getRole());
+                    if ($users[$i]->getRole()[0] == null) {
+                        $id = $users[$i]->getId();
+                        /////////
+                        $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                        if (!$connection) {
+                            die("Connection failed: " . mysqli_connect_error());
+                        }
+                        $query = "INSERT INTO user_role (user_id, role_id) VALUES ('$id', '$r')"; // affecter à n'importe quel user sans role le role ROLE_USER
+                        if (mysqli_query($connection, $query)) {
+                            echo "Added yes";
+                        } else {
+                            echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                        }
+
+                        mysqli_close($connection);
+                        // dd($clients);
+                        $j++;
+                    } else {
+                        continue;
+                    }
+                }
+                $pagination = $paginatorInterface->paginate(
+                    $users,
+                    $request->query->getInt('page', 1),
+                    10
+                );
+                return $this->render('admin/home.html.twig', compact('pagination'));
             } else {
                 return $this->redirectToRoute('app_home');
             }
