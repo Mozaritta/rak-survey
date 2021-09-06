@@ -43,7 +43,7 @@ body { font-family: sans-serif; }
             {# {{srv.name}}<br> #}
     <div class="card mx-5">
         <div class="card-body">
-            In this form you will go {{srvs|length}} sections. Each with a specific content to reach the needs of our clients and to improve the performance of our website and our agency staff.
+            In this form you will go {{sections|length}} sections. Each with a specific content to reach the needs of our clients and to improve the performance of our website and our agency staff.
         </div>
     </div>
                 
@@ -56,7 +56,7 @@ body { font-family: sans-serif; }
 
     {% if app.user %}
     <div class="gallery js-flickity border border-primary">
-        {% for srv in srvs %}
+        {% for srv in sections %}
         <div class="gallery-cell my-4" style="height:;">
             <div class="col mb-3">
                 <div class="card">

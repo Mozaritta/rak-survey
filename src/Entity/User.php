@@ -98,6 +98,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $role;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $answered;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -381,6 +386,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeRole(Role $role): self
     {
         $this->role->removeElement($role);
+
+        return $this;
+    }
+
+    public function getAnswered(): ?bool
+    {
+        return $this->answered;
+    }
+
+    public function setAnswered(?bool $answered): self
+    {
+        $this->answered = $answered;
 
         return $this;
     }

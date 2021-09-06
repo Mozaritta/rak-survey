@@ -1,47 +1,47 @@
 {% extends 'layouts/base.html.twig' %}
 {% block body %}
 <head><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"> </script> </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"> </script>
 <style>
-/* external css: flickity.css */
-
-* {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
+* {-webkit-box-sizing: border-box;box-sizing: border-box;}
 body { font-family: sans-serif; }
-
-.gallery {
-  background: #EEE;
-}
-
+.gallery {background: #EEE;}
 .gallery-cell {
   width: 66%;
-  height: 350px !important;
+  /*height:auto !important;*/
   margin-right: 10px;
+}.flickity-prev-next-button{
+    top:90%;
+    right:0px;
+    left:90%;
 }
-.text-center{
-  text-align:center
-}
- 
- 
-
 </style>
-<h1>hello client</h1>
-<h1 class="text-center">Flickity Responsive Carousel</h1>
+</head>
+
+<h1>Hello client</h1>
+<div class="container">
+<h2 class="text-center">Actualite</h2>
 <div class="gallery js-flickity"
   data-flickity-options='{ "wrapAround": true }'>
+  <div class="gallery-cell " style="text-align:center;">
+    <div class="card px-4 py-4">
+      <h4>981,26 Millions de DH d’investissements pour la période 2019-2023</h4>
+      <img src="{{ asset('images/actu.jpg') }}" width="300" height="200" class="shadow rounded my-2" />
+      <p> hello </p>
+    </div>
+  </div>
   <div class="gallery-cell">
-<div class="card">hello</div>  </div>
+    <h3>La RAK remporte le prix d’excellence « Emtiaz »</h3>
+  </div>
   <div class="gallery-cell">
+    <h3>Traitement de réclamation</h3>
+  </div>
+  <div class="gallery-cell">
+    <h3>1 Milliard et 318,43 Millions de DH d’investissements pour la période 2020-2024 Dont 303,23 Millions de DH au titre de l’année 2020</h3>
   </div>
   <div class="gallery-cell">
   </div>
-  <div class="gallery-cell">
-  </div>
-  <div class="gallery-cell">
-  </div>
+</div>
 </div>
 
 {% endblock %}

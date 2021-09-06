@@ -116,7 +116,7 @@ class QstController extends AbstractController
     /**
      * @Route("/result", name="set_answer")
      */
-    public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
+    public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             $user = $this->getUser()->getId();
@@ -139,6 +139,11 @@ class QstController extends AbstractController
                 }
                 $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
                 if (mysqli_query($connection, $query)) {
+                    // dd($user);
+                    $this->getUser()->setAnswered(true);
+                    $em->persist($this->getUser());
+                    $em->flush();
+                    // dd($this->getUser());
                     $this->addFlash(
                         'success',
                         'You answers wer stocked successfully'
