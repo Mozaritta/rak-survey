@@ -25,6 +25,15 @@ body { font-family: sans-serif; }
   
 {% endif %} #}
 <div class="container">
+<button type="button" class="btn btn-primary">
+  Notifications {% if notif is same as 0 %}
+          <span class="badge bg-secondary">{{notif}}</span>
+            
+          {% else %}
+          <span class="badge bg-primary">{{notif}}</span>
+            
+          {% endif %}
+</button>
 <h2 class="text-center">Actualite</h2>
 <div class="gallery js-flickity border border-primary"
   data-flickity-options='{ "wrapAround": true }'>

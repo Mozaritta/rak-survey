@@ -77,6 +77,8 @@ class AdminController extends AbstractController
         }
     }
 
+    ///// questions without sections
+
     /**
      * @Route("/orphan_qst", name="orphan_qst")
      */
@@ -99,6 +101,8 @@ class AdminController extends AbstractController
             return $this->render('anonymous/first.html.twig');
         }
     }
+
+    ///////////////////////end
     /**
      * @Route("/list", name="list_client")
      */
@@ -192,6 +196,7 @@ class AdminController extends AbstractController
     }
 
     //// end ////
+    ////// QUESTION CRUD /////////////////////////
     /**
      * @Route("/valid", name="valid_qst", methods="GET")
      */
@@ -219,7 +224,6 @@ class AdminController extends AbstractController
             return $this->render('anonymous/first.html.twig');
         }
     }
-    ////// QUESTION CRUD /////////////////////////
 
     /**
      * @Route("/updateQst/{id<[0-9]+>}", name="update_qst")

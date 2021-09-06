@@ -31,16 +31,25 @@ class QstController extends AbstractController
      */
     public function index(AuthenticationUtils $authenticationUtils, QuestionsRepository $qstRepository): Response
     {
+        $notif = 0;
         if ($authenticationUtils->getLastUsername()) {
             if ($this->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('home');
             } else if ($this->isGranted('ROLE_USER')) {
-                return $this->render('client/home.html.twig');
+                if ($this->getUser()->getAnswered() == 1) {
+                    $notif = 0;
+                }
+                return $this->render('client/home.html.twig', ['notif' => $notif]);
             }
         } else {
             return $this->render('anonymous/first.html.twig');
         }
     }
+
+
+    ///////////////////notifications to answer client
+
+    //////end
 
     /**
      * @Route("/add", name="add_qst", methods="GET|POST")
@@ -111,7 +120,7 @@ class QstController extends AbstractController
             $error = $authenticationUtils->getLastAuthenticationError();
             return $this->render('client/form.html.twig', compact('frm', 'sections', 'qsts', 'error'));
         } else {
-            return $this->render('qst/valid.html.twig');
+            return $this->render('anonymous/first.html.twig');
         }
     }
 
@@ -175,7 +184,7 @@ class QstController extends AbstractController
             //     return $this->redirectToRoute('app_home');
             // }
         } else {
-            return $this->redirectToRoute('app_home');
+            return $this->render('anonymous/first.html.twig');
         }
     }
     /**
