@@ -17,7 +17,9 @@
 <th>Email </th>
 <th>Form Answerd </th>
 <th>Role </th>
+<th>Remark </th>
 <th>Set Admin </th>
+
 {# {{ dump(clients) }} #}
 </tr>
 {% for client in pagination %}
@@ -28,6 +30,11 @@
     <td>{{ client.email}}</td>
     <td>{% if(client.answered is same as null) %} No {% elseif client.answered is same as true %} Yes {% endif %}</td>
     <td>{{ client.roles[0]}}</td>
+    {% if client.remark is not same as null %}
+    <td>{{ client.remark.description}}</td>
+        {% else %}
+    <td>No remark</td>
+    {% endif %}
     <td><a href="{{ path('set_admin', {id:client.id}) }}" class="btn btn-primary">Set admin</a></td>
 </tr>
 {% endfor %}

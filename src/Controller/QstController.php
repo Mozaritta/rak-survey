@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Form;
 use App\Entity\Questions;
+use App\Entity\Remark;
 use App\Form\QuestionsType;
+use App\Form\RemarkType;
 use App\Repository\FormRepository;
 use App\Repository\QuestionsRepository;
 use App\Repository\SectionRepository;
@@ -119,52 +121,96 @@ class QstController extends AbstractController
     public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $user = $this->getUser()->getId();
-            // if (isset($_POST['answers'])) {
-            $qst = $qstRepository->findAll();
-            for ($i = 0; $i < sizeof($qst); $i++) {
-                $id = $qst[$i]->getId();
-                // dd("check$id");
-                $name[$i] = $request->query->get("check$id");
-                if ($name[$i] == null) {
-                    $name[$i] = 'No';
-                }
-                if (is_array($name[$i])) {
-                    $name[$i] = 'Yes';
-                }
-                // dd($name[$i]);
-                $connection = mysqli_connect("localhost", "root", "", "raksurvey");
-                if (!$connection) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-                $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
-                if (mysqli_query($connection, $query)) {
-                    // dd($user);
-                    $this->getUser()->setAnswered(true);
-                    $em->persist($this->getUser());
-                    $em->flush();
-                    // dd($this->getUser());
-                    $this->addFlash(
-                        'success',
-                        'You answers wer stocked successfully'
-                    );
-                } else {
-                    $this->addFlash(
-                        'danger',
-                        mysqli_error($connection)
-                    );
-                    // echo "Error: " . $query . "<br>" . mysqli_error($connection);
-                }
+            if ($this->getUser()->getAnswered() == 1) {
+                $this->addFlash(
+                    'info',
+                    'You have already answered the form'
+                );
+                return $this->redirectToRoute('remark');
+            } else {
+                $user = $this->getUser()->getId();
+                // if (isset($_POST['answers'])) {
+                $qst = $qstRepository->findAll();
+                for ($i = 0; $i < sizeof($qst); $i++) {
+                    $id = $qst[$i]->getId();
+                    // dd("check$id");
+                    $name[$i] = $request->query->get("check$id");
+                    if ($name[$i] == null) {
+                        $name[$i] = 'No';
+                    }
+                    if (is_array($name[$i])) {
+                        $name[$i] = 'Yes';
+                    }
+                    // dd($name[$i]);
+                    $connection = mysqli_connect("localhost", "root", "", "raksurvey");
+                    if (!$connection) {
+                        die("Connection failed: " . mysqli_connect_error());
+                    }
+                    $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
+                    if (mysqli_query($connection, $query)) {
+                        // dd($user);
+                        $this->getUser()->setAnswered(true);
+                        $em->persist($this->getUser());
+                        $em->flush();
+                        // dd($this->getUser());
+                        $this->addFlash(
+                            'success',
+                            'You answers wer stocked successfully'
+                        );
+                    } else {
+                        $this->addFlash(
+                            'danger',
+                            mysqli_error($connection)
+                        );
+                        // echo "Error: " . $query . "<br>" . mysqli_error($connection);
+                    }
 
-                mysqli_close($connection);
+                    mysqli_close($connection);
+                }
+                // dd($name);
+                // return $this->render('test.html.twig', compact('name'));
+                return $this->redirectToRoute('remark');
             }
-            // dd($name);
-            return $this->render('test.html.twig', compact('name'));
             // } else {
             //     return $this->redirectToRoute('app_home');
             // }
         } else {
             return $this->redirectToRoute('app_home');
+        }
+    }
+    /**
+     * @Route("/remark", name="remark")
+     */
+    public function remark(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
+    {
+        if ($authenticationUtils->getLastUsername()) {
+            $remark = new Remark;
+            if ($this->getUser()->getAnswered() == 1) {
+                $remark->setUser($this->getUser());
+                $form = $this->createForm(RemarkType::class, $remark);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->persist($remark);
+                    $em->flush();
+                    $this->addFlash(
+                        'success',
+                        'Remark added successfully'
+                    );
+                    return $this->redirectToRoute('app_home');
+                }
+                return $this->render('client/note.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            } else {
+                $this->addFlash(
+                    'danger',
+                    'You still haven\'t answered your survey'
+                );
+                return $this->redirectToRoute('answer_form');
+            }
+        } else {
+            return $this->render('anonymous/first.html.twig');
         }
     }
 }

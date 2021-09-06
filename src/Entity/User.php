@@ -103,6 +103,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $answered;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Remark::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $remark;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -398,6 +403,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAnswered(?bool $answered): self
     {
         $this->answered = $answered;
+
+        return $this;
+    }
+
+    public function getRemark(): ?Remark
+    {
+        return $this->remark;
+    }
+
+    public function setRemark(?Remark $remark): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($remark === null && $this->remark !== null) {
+            $this->remark->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($remark !== null && $remark->getUser() !== $this) {
+            $remark->setUser($this);
+        }
+
+        $this->remark = $remark;
 
         return $this;
     }
