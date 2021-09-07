@@ -2,23 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Form;
-use App\Entity\Questions;
 use App\Entity\Remark;
-use App\Form\QuestionsType;
 use App\Form\RemarkType;
+use App\Entity\Questions;
+use App\Form\QuestionsType;
 use App\Repository\FormRepository;
-use App\Repository\QuestionsRepository;
-use App\Repository\SectionRepository;
 use App\Repository\TypeRepository;
+use App\Repository\SectionRepository;
+use App\Repository\QuestionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-// use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use App\Repository\NotificationRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class QstController extends AbstractController
@@ -27,20 +25,28 @@ class QstController extends AbstractController
 
     /**
      * @Route("/", name="app_home", methods="GET")
-     * @Route("/qst/app_home")
      */
-    public function index(AuthenticationUtils $authenticationUtils, QuestionsRepository $qstRepository): Response
+    public function index(AuthenticationUtils $authenticationUtils, NotificationRepository $notificationRepository): Response
     {
-        $notif = 0;
         if ($authenticationUtils->getLastUsername()) {
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('home');
-            } else if ($this->isGranted('ROLE_USER')) {
-                if ($this->getUser()->getAnswered() == 1) {
-                    $notif = 0;
+            $notification = $notificationRepository->findAll();
+            $notif = 0;
+            for ($i = 0; $i < sizeof($notification); $i++) {
+                // dd($notification[0]->getUser()->getId());
+                if ($notification[$i]->getUser()->getId() == $this->getUser()->getId()) {
+                    // dd($notif);
+                    $notif = 1;
                 }
-                return $this->render('client/home.html.twig', ['notif' => $notif]);
             }
+            // dd($notification[0]->getUserId()->getId());
+            // dd($this->getUser());
+            // if ($this->getUser()->getAnswered() == true) {
+            //     $notif = 0;
+            // }
+            return $this->render('client/home.html.twig', [
+                'notif' => $notif,
+                'notification' => $notification
+            ]);
         } else {
             return $this->render('anonymous/first.html.twig');
         }
@@ -97,14 +103,16 @@ class QstController extends AbstractController
     ////// ANSWER THE FORM  /////////////////////////
 
     /**
-     * @Route("/answer", name="answer_form") // should send the id of the specific form to answer
+     * @Route("/answer/{idd<[0-9]+>}", name="answer_form") // should send the id of the specific form to answer
      */
-    public function answerForm(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
+    public function answerForm(int $idd, UserRepository $userRepository, AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            $frm = $formRepository->findOneBy(['id' => 3]);
+
+            // $user = $userRepository->findOneBy(['id' => $id]);
+            $frm = $formRepository->findOneBy(['id' => $idd]);
             // dd($frm->getSection());
-            $sections = $sectionRepository->findBy(['form' => 3]);
+            $sections = $sectionRepository->findBy(['form' => $idd]);
             // dd($srvs);
             for ($i = 0; $i < 1; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['section' => $sections[$i]->getId()]);
@@ -125,7 +133,7 @@ class QstController extends AbstractController
     }
 
     /**
-     * @Route("/result", name="set_answer")
+     * @Route("/answer/result", name="set_answer")
      */
     public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
     {
@@ -138,6 +146,7 @@ class QstController extends AbstractController
                 return $this->redirectToRoute('remark');
             } else {
                 $user = $this->getUser()->getId();
+                dd($user);
                 // if (isset($_POST['answers'])) {
                 $qst = $qstRepository->findAll();
                 for ($i = 0; $i < sizeof($qst); $i++) {

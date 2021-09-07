@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title 'Show sections!' %}
+{% block title 'Show Clients!' %}
 
 {% block body %}
 <style> 
@@ -28,7 +28,19 @@
     <td>{{ client.firstName}}</td>
     <td>{{ client.lastName}}</td>
     <td>{{ client.email}}</td>
-    <td>{% if(client.answered is same as null) %} No {% elseif client.answered is same as true %} Yes {% endif %}</td>
+    <td>
+    {% if(client.answered is same as null) %}
+        <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Send Notifications</a>
+            <ul class="dropdown-menu">
+            
+                {% for form in forms %}
+                    <li><a class="dropdown-item" href="{{ (path('get_notif', {idd: client.id, id:form.id})) }}">{{form.name}}</a></li>
+                {% endfor %}
+            </ul>
+    {% elseif client.answered is same as true %}
+        Yes
+    {% endif %}
+    </td>
     <td>{{ client.roles[0]}}</td>
     {% if client.remark is not same as null %}
     <td>{{ client.remark.description}}</td>

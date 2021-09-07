@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Form;
+use App\Entity\Notification;
 use App\Entity\Type;
 use App\Form\FormType;
 use App\Entity\Section;
@@ -11,6 +12,7 @@ use App\Form\SectionType;
 use App\Form\QuestionsType;
 use App\Repository\TypeRepository;
 use App\Repository\FormRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\SectionRepository;
 use App\Repository\QuestionsRepository;
 use App\Repository\RoleRepository;
@@ -76,6 +78,36 @@ class AdminController extends AbstractController
             return $this->render('anonymous/first.html.twig');
         }
     }
+    /// tell the client to answer th form ///
+
+    /**
+     * @Route("/getNotif{idd<[0-9]+>}/{id<[0-9]+>}", name="get_notif")
+     */
+    public function getNotification(
+        int $idd,
+        int $id,
+        FormRepository $formRepository,
+        UserRepository $userRepository,
+        EntityManagerInterface $em,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
+        if ($authenticationUtils->getLastUsername()) {
+            $notif = 1;
+            $notification = new Notification;
+            $form = $formRepository->findOneBy(['id' => $id]);
+            $user = $userRepository->findOneBy(['id' => $idd]);
+            $notification->setUser($user);
+            $notification->setForm($form);
+            $notification->setToDo('Answer this form');
+            $em->persist($notification);
+            $em->flush();
+
+            return $this->redirectToRoute('list_client');
+        } else {
+            return $this->render('anonymous/first.html.twig');
+        }
+    }
+    /////// end //////
 
     ///// questions without sections
 
@@ -106,8 +138,9 @@ class AdminController extends AbstractController
     /**
      * @Route("/list", name="list_client")
      */
-    public function listClient(AuthenticationUtils $authenticationUtils, UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
+    public function listClient(AuthenticationUtils $authenticationUtils, FormRepository $formRepository, UserRepository $userRepository, RoleRepository $roleRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
+        $forms = $formRepository->findAll();
         if ($authenticationUtils->getLastUsername()) {
             if ($this->isGranted('ROLE_ADMIN')) {
                 $user = $userRepository->findBy([], ['id' => 'ASC']);
@@ -150,7 +183,7 @@ class AdminController extends AbstractController
                     );
                 }
                 // dd($clients);
-                return $this->render('admin/list.html.twig', compact('pagination'));
+                return $this->render('admin/list.html.twig', compact('pagination', 'forms'));
             } else {
                 return $this->redirectToRoute('app_home');
             }

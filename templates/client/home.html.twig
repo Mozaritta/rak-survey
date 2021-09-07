@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html.twig' %}
 {% block body %}
-<head><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css" />
+<head>
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"> </script>
 <style>
 * {-webkit-box-sizing: border-box;box-sizing: border-box;}
@@ -25,15 +26,30 @@ body { font-family: sans-serif; }
   
 {% endif %} #}
 <div class="container">
-<a type="button" class="btn btn-primary">
-  Notifications {% if notif is same as 0 %}
-          <span class="badge bg-secondary">{{notif}}</span>
-            
-          {% else %}
-          <span class="badge bg-primary">{{notif}}</span>
-            
-          {% endif %}
-</a>
+{% if app.user%}
+  {% if app.user.role[0].name is same as 'Client' %}
+
+    {% if app.user.answered is same as true %}
+      <a type="button" href="#" class="btn btn-primary">
+      Notifications 
+      <span class="badge bg-secondary">0</span>
+    {% endif %}
+
+    {% if notif is not same as 0 %}
+
+      {% if app.user.answered is same as null %}
+        <a type="button" href="{{ path('answer_form', { idd:notification[0].form.id}) }}" class="btn btn-primary">
+        Notifications
+        <span class="badge bg-danger">{{notif}}</span>
+    
+      {% endif %}
+    {% endif %}
+    </a>
+
+
+  {% endif %}
+{% endif %}
+
 <h2 class="text-center">Actualite</h2>
 <div class="gallery js-flickity border border-primary"
   data-flickity-options='{ "wrapAround": true }'>

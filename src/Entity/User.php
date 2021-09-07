@@ -108,11 +108,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $remark;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $notification;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->role = new ArrayCollection();
+        $this->notification = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -425,6 +431,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotification(): Collection
+    {
+        return $this->notification;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notification->contains($notification)) {
+            $this->notification[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notification->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
 
         return $this;
     }
