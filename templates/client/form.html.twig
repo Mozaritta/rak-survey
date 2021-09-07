@@ -41,7 +41,7 @@ body { font-family: sans-serif; }
 <div class="container" >
         {# {% for srv in srvs %} #}
             {# {{srv.name}}<br> #}
-    <div class="card mx-5">
+    <div class="card mx-5 border border-info shadow">
         <div class="card-body">
             In this form you will go {{sections|length}} sections. Each with a specific content to reach the needs of our clients and to improve the performance of our website and our agency staff.
         </div>
@@ -55,22 +55,20 @@ body { font-family: sans-serif; }
     {% endif %}
 
     {% if app.user %}
-    <div class="gallery js-flickity border border-primary">
         {% for srv in sections %}
-        <div class="gallery-cell my-4" style="height:;">
             <div class="col mb-3">
-                <div class="card">
+                <div class="card border border-primary shadow">
                     <div class="card-body">
-                        <h5 class="card-title text-center fw-bold">{{srv.name}}</h5>
+                        <h2 class="card-title text-center">{{srv.name}}</h2>
                         {% if srv.description %}
                             {# {{x.description}} #}
-                            <p class="card-text">{{srv.description}}</p>
+                            <p class="card-text fw-bold text-center">{{srv.description}}</p>
                         {% else %}
                             <p class="card-text">No descriptin was set for this section</p><br>
                         {% endif %}
                         {% for x in srv.question %}
-                            <br><p class="card-text"><i class="bi bi-check-square"></i>&nbsp{{x.description}}</p>
-                            <div class="mx-2">
+                            <br><p class="card-text mx-3"><i class="bi bi-check-square"></i>&nbsp{{x.description}}</p>
+                            <div class="mx-5">
                                 {% if x.type.name is same as 'CheckBox' %}
                                     <div class="form-check">
                                         <input class="form-check-input" value="Yes" type="checkbox" id="check{{x.id}}" name="check{{x.id}}[]" >
@@ -119,12 +117,10 @@ body { font-family: sans-serif; }
                     </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
-
-        <input class="btn btn-lg btn-outline-primary shadow-lg p-3 mb-5" style="top:40%;margin-left:50px;font-size:30px" type="submit" value="Submit answers &#128077;">
-        </div>
-
+    <div class="conatiner text-center mb-5">
+        <input class="btn btn-lg btn-outline-primary shadow p-3 mb-5" style="top:40%;margin-left:50px;font-size:30px" type="submit" value="Submit answers &#128077;">
+</div>
     {% endif %}
     </form>
     </div>

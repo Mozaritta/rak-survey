@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
 use App\Entity\Remark;
 use App\Form\RemarkType;
 use App\Entity\Questions;
@@ -135,7 +136,7 @@ class QstController extends AbstractController
     /**
      * @Route("/answer/result", name="set_answer")
      */
-    public function setAnswer(QuestionsRepository $qstRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
+    public function setAnswer(QuestionsRepository $qstRepository, UserRepository $userRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em, EntityManagerInterface $em1): Response
     {
         if ($authenticationUtils->getLastUsername()) {
             if ($this->getUser()->getAnswered() == 1) {
@@ -146,7 +147,7 @@ class QstController extends AbstractController
                 return $this->redirectToRoute('remark');
             } else {
                 $user = $this->getUser()->getId();
-                dd($user);
+                // dd($user);
                 // if (isset($_POST['answers'])) {
                 $qst = $qstRepository->findAll();
                 for ($i = 0; $i < sizeof($qst); $i++) {
@@ -160,30 +161,23 @@ class QstController extends AbstractController
                         $name[$i] = 'Yes';
                     }
                     // dd($name[$i]);
-                    $connection = mysqli_connect("localhost", "root", "", "raksurvey");
-                    if (!$connection) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
-                    $query = "INSERT INTO answers (question_id, client_id,answer) VALUES ('$id', '$user', '$name[$i]')";
-                    if (mysqli_query($connection, $query)) {
-                        // dd($user);
-                        $this->getUser()->setAnswered(true);
-                        $em->persist($this->getUser());
-                        $em->flush();
-                        // dd($this->getUser());
-                        $this->addFlash(
-                            'success',
-                            'You answers wer stocked successfully'
-                        );
-                    } else {
-                        $this->addFlash(
-                            'danger',
-                            mysqli_error($connection)
-                        );
-                        // echo "Error: " . $query . "<br>" . mysqli_error($connection);
-                    }
+                    $answer = new Answer;
+                    $question = $qstRepository->findOneBy(['id' => $id]);
+                    $answer->setQuestion($question);
+                    $user = $userRepository->findOneBy(['id' => $user]);
+                    $answer->setClient($user);
+                    $answer->setAnswer($name[$i]);
+                    $em1->persist($answer);
+                    $em1->flush();
 
-                    mysqli_close($connection);
+                    $this->getUser()->setAnswered(true);
+                    $em->persist($this->getUser());
+                    $em->flush();
+                    // dd($this->getUser());
+                    $this->addFlash(
+                        'success',
+                        'You answers wer stocked successfully'
+                    );
                 }
                 // dd($name);
                 // return $this->render('test.html.twig', compact('name'));
