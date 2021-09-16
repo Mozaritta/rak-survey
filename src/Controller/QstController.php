@@ -13,6 +13,7 @@ use App\Repository\SectionRepository;
 use App\Repository\QuestionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\NotificationRepository;
+use App\Repository\RemarkRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -204,27 +205,37 @@ class QstController extends AbstractController
     public function remark(
         Request $request,
         AuthenticationUtils $authenticationUtils,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        RemarkRepository $remarkRepository
     ): Response {
         if ($authenticationUtils->getLastUsername()) {
             $remark = new Remark;
             if ($this->getUser()->getAnswered() == 1) {
-                $remark->setUser($this->getUser());
-                $form = $this->createForm(RemarkType::class, $remark);
-                $form->handleRequest($request);
+                $remarks = $remarkRepository->findOneBy(['user' => $this->getUser()]);
+                if (empty($remarks)) {
+                    $remark->setUser($this->getUser());
+                    $form = $this->createForm(RemarkType::class, $remark);
+                    $form->handleRequest($request);
 
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $em->persist($remark);
-                    $em->flush();
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $em->persist($remark);
+                        $em->flush();
+                        $this->addFlash(
+                            'success',
+                            'Remark added successfully'
+                        );
+                        return $this->redirectToRoute('app_home');
+                    }
+                    return $this->render('client/note.html.twig', [
+                        'form' => $form->createView()
+                    ]);
+                } else {
                     $this->addFlash(
-                        'success',
-                        'Remark added successfully'
+                        'primary',
+                        'You ave already set your remark! Thanks'
                     );
                     return $this->redirectToRoute('app_home');
                 }
-                return $this->render('client/note.html.twig', [
-                    'form' => $form->createView()
-                ]);
             } else {
                 $this->addFlash(
                     'danger',
