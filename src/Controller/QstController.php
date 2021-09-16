@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Answer;
+use App\Entity\Answers;
 use App\Entity\Remark;
 use App\Form\RemarkType;
 use App\Entity\Questions;
@@ -61,8 +61,12 @@ class QstController extends AbstractController
     /**
      * @Route("/add", name="add_qst", methods="GET|POST")
      */
-    public function addQst(AuthenticationUtils $authenticationUtils, TypeRepository $typeRepository, Request $request, EntityManagerInterface $em): Response
-    {
+    public function addQst(
+        Request $request,
+        EntityManagerInterface $em,
+        TypeRepository $typeRepository,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
         if ($authenticationUtils->getLastUsername()) {
             $question = new Questions;
             // if ($this->isGranted('ROLE_USER')) {
@@ -106,26 +110,24 @@ class QstController extends AbstractController
     /**
      * @Route("/answer/{idd<[0-9]+>}", name="answer_form") // should send the id of the specific form to answer
      */
-    public function answerForm(int $idd, UserRepository $userRepository, AuthenticationUtils $authenticationUtils, FormRepository $formRepository, QuestionsRepository $qstRepository, SectionRepository $sectionRepository): Response
-    {
+    public function answerForm(
+        int $idd,
+        UserRepository $userRepository,
+        FormRepository $formRepository,
+        QuestionsRepository $qstRepository,
+        SectionRepository $sectionRepository,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
         if ($authenticationUtils->getLastUsername()) {
 
-            // $user = $userRepository->findOneBy(['id' => $id]);
             $frm = $formRepository->findOneBy(['id' => $idd]);
-            // dd($frm->getSection());
             $sections = $sectionRepository->findBy(['form' => $idd]);
-            // dd($srvs);
             for ($i = 0; $i < 1; $i++) {
                 $qsts[$i] = $qstRepository->findBy(['section' => $sections[$i]->getId()]);
             }
-            // dd(sizeof($qsts[0]));
             if (sizeof($qsts[0]) == 0) {
                 $this->addFlash('danger', 'No questions in the section');
             }
-            // foreach ($srvs as $test) {
-            //     $qsts = $qstRepository->findOneBy(['section' => $test->getId()]);
-            // }
-            // dd($qsts);
             $error = $authenticationUtils->getLastAuthenticationError();
             return $this->render('client/form.html.twig', compact('frm', 'sections', 'qsts', 'error'));
         } else {
@@ -136,8 +138,14 @@ class QstController extends AbstractController
     /**
      * @Route("/answer/result", name="set_answer")
      */
-    public function setAnswer(QuestionsRepository $qstRepository, UserRepository $userRepository, Request $request, AuthenticationUtils $authenticationUtils, EntityManagerInterface $em, EntityManagerInterface $em1): Response
-    {
+    public function setAnswer(
+        Request $request,
+        EntityManagerInterface $em,
+        EntityManagerInterface $em1,
+        UserRepository $userRepository,
+        QuestionsRepository $qstRepository,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
         if ($authenticationUtils->getLastUsername()) {
             if ($this->getUser()->getAnswered() == 1) {
                 $this->addFlash(
@@ -161,7 +169,7 @@ class QstController extends AbstractController
                         $name[$i] = 'Yes';
                     }
                     // dd($name[$i]);
-                    $answer = new Answer;
+                    $answer = new Answers;
                     $question = $qstRepository->findOneBy(['id' => $id]);
                     $answer->setQuestion($question);
                     $user = $userRepository->findOneBy(['id' => $user]);
@@ -193,8 +201,11 @@ class QstController extends AbstractController
     /**
      * @Route("/remark", name="remark")
      */
-    public function remark(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
-    {
+    public function remark(
+        Request $request,
+        AuthenticationUtils $authenticationUtils,
+        EntityManagerInterface $em
+    ): Response {
         if ($authenticationUtils->getLastUsername()) {
             $remark = new Remark;
             if ($this->getUser()->getAnswered() == 1) {
