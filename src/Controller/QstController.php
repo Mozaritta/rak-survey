@@ -185,7 +185,7 @@ class QstController extends AbstractController
                     // dd($this->getUser());
                     $this->addFlash(
                         'success',
-                        'You answers wer stocked successfully'
+                        'Your answers were stocked successfully'
                     );
                 }
                 // dd($name);
